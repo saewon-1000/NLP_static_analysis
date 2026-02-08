@@ -102,7 +102,7 @@ python model_comparator.py
 
 ---
 
-## 🔬 Dataset Characteristics
+## Dataset Characteristics
 
 ### Benign Code Examples
 - Proper boundary checks
