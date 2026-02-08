@@ -67,7 +67,7 @@ This script is executed in the following order:
 4. Run Model 3 (Enhanced LLM) – requires Ollama
 5. Result comparison and evaluation
 
-### 3. 개별 실행
+### 3. Individual Execution
 
 ```bash
 # Generate dataset only
