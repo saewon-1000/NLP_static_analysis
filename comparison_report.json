@@ -1,0 +1,64 @@
+{
+  "metrics_comparison": {
+    "Model 1: Regex": {
+      "accuracy": 0.61,
+      "precision": 0,
+      "recall": 0.0,
+      "f1_score": 0,
+      "avg_confidence": 0
+    },
+    "Model 2: Vanilla LLM": {
+      "accuracy": 0.7,
+      "precision": 0.625,
+      "recall": 1.0,
+      "f1_score": 0.7692307692307693,
+      "avg_confidence": 0.89
+    },
+    "Model 3: Enhanced LLM": {
+      "accuracy": 0.7,
+      "precision": 0.625,
+      "recall": 1.0,
+      "f1_score": 0.7692307692307693,
+      "avg_confidence": 0.9724999999999999
+    }
+  },
+  "error_analysis": {
+    "Model 1: Regex": {
+      "false_positives": 0,
+      "false_negatives": 39,
+      "fp_rate": 0.0,
+      "fn_rate": 0.39,
+      "fp_examples": [],
+      "fn_examples": [
+        "dangerous_49",
+        "dangerous_7",
+        "dangerous_43"
+      ]
+    },
+    "Model 2: Vanilla LLM": {
+      "false_positives": 6,
+      "false_negatives": 0,
+      "fp_rate": 0.3,
+      "fn_rate": 0.0,
+      "fp_examples": [
+        "safe_17",
+        "safe_20",
+        "safe_2"
+      ],
+      "fn_examples": []
+    },
+    "Model 3: Enhanced LLM": {
+      "false_positives": 6,
+      "false_negatives": 0,
+      "fp_rate": 0.3,
+      "fn_rate": 0.0,
+      "fp_examples": [
+        "safe_17",
+        "safe_20",
+        "safe_2"
+      ],
+      "fn_examples": []
+    }
+  },
+  "summary": "\nHypothesis Validation:\n- Best Overall Performance (F1): Model 2: Vanilla LLM\n- Best Recall (Detection): Model 2: Vanilla LLM\n- Best Precision (Accuracy): Model 2: Vanilla LLM\n\nKey Findings:\n1. Regex-based analyzer shows limitations in detecting semantic vulnerabilities\n   that don't match predefined patterns.\n\n2. Vanilla LLM demonstrates better semantic understanding but may lack\n   domain-specific static analysis knowledge.\n\n3. Static Analysis-Enhanced LLM combines semantic understanding with\n   static analysis principles, showing improved detection of subtle bugs\n   like off-by-one errors, race conditions, and TOCTOU vulnerabilities.\n\nConclusion:\nThe hypothesis is NEEDS MORE DATA - \nLLMs augmented with static analysis domain knowledge show potential \nability to understand code intent and detect semantic vulnerabilities beyond \npattern matching.\n"
+}

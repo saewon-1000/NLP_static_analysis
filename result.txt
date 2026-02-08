@@ -1,0 +1,29 @@
+======================================================================
+MODEL 1: REGEX-BASED STATIC ANALYZER - 상세 분석
+======================================================================
+
+📊 성능 메트릭:
+  Accuracy:  0.580
+  Precision: 0.000
+  Recall:    0.000
+  F1 Score:  0.000
+
+📈 Confusion Matrix:
+  True Positives:  0
+  True Negatives:  37
+  False Positives: 0
+  False Negatives: 42
+
+=== Model 2: Vanilla LLM ===
+Accuracy:  0.650
+Precision: 0.588
+Recall:    1.000
+F1 Score:  0.741
+Avg Confidence: 0.883
+
+=== Model 3: Static Analysis-Enhanced LLM ===
+Accuracy:  0.750
+Precision: 0.667
+Recall:    1.000
+F1 Score:  0.800
+Avg Confidence: 0.960

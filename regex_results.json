@@ -1,0 +1,1049 @@
+{
+  "results": [
+    {
+      "id": "safe_44",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_49",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_7",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_48",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_43",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_3",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_17",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_33",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_20",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_34",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_21",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_2",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_11",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_16",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_32",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_35",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_21",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_32",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_40",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_22",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_10",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "safe_15",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_16",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_15",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_23",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_1",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "race_condition",
+          "pattern": "volatile.*=",
+          "matched_text": "volatile uint32_t shared_counter =",
+          "position": [
+            0,
+            34
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_13",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_0",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_1",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_13",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_18",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_49",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_30",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_41",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_42",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_24",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_25",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_14",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_28",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_36",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_30",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_9",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_37",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_31",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_5",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_22",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_4",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_46",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_26",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_43",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "safe_3",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_12",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_45",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_38",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "race_condition",
+          "pattern": "volatile.*=",
+          "matched_text": "volatile uint32_t shared_counter =",
+          "position": [
+            0,
+            34
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_42",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_45",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_18",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_8",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_11",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "int\\s+\\w+;",
+          "matched_text": "int status;",
+          "position": [
+            35,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "safe_39",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_31",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_28",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_4",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_40",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_34",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_46",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "int\\s+\\w+;",
+          "matched_text": "int status;",
+          "position": [
+            35,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_2",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_39",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "race_condition",
+          "pattern": "volatile.*=",
+          "matched_text": "volatile uint32_t shared_counter =",
+          "position": [
+            0,
+            34
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "safe_29",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_14",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_38",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_8",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_24",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_19",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_10",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_33",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_47",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_20",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_12",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "int\\s+\\w+;",
+          "matched_text": "int status;",
+          "position": [
+            35,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_6",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_0",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_36",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "race_condition",
+          "pattern": "volatile.*=",
+          "matched_text": "volatile uint32_t shared_counter =",
+          "position": [
+            0,
+            34
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_5",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "race_condition",
+          "pattern": "volatile.*=",
+          "matched_text": "volatile uint32_t shared_counter =",
+          "position": [
+            0,
+            34
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_27",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "int\\s+\\w+;",
+          "matched_text": "int status;",
+          "position": [
+            35,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_44",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "int\\s+\\w+;",
+          "matched_text": "int status;",
+          "position": [
+            35,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_23",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_17",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_26",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "safe_41",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_35",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_9",
+      "true_label": "dangerous",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "race_condition",
+          "pattern": "volatile.*=",
+          "matched_text": "volatile uint32_t shared_counter =",
+          "position": [
+            0,
+            34
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "safe_19",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_47",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_6",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "safe_7",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    },
+    {
+      "id": "dangerous_29",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "dangerous_48",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_25",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": true
+    },
+    {
+      "id": "dangerous_37",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.6,
+      "findings": [],
+      "correct": false
+    },
+    {
+      "id": "safe_27",
+      "true_label": "safe",
+      "predicted_label": "uncertain",
+      "confidence": 0.5,
+      "findings": [
+        {
+          "category": "uninitialized",
+          "pattern": "uint\\d+_t\\s+\\w+;",
+          "matched_text": "uint8_t data;",
+          "position": [
+            33,
+            46
+          ]
+        }
+      ],
+      "correct": true
+    }
+  ],
+  "evaluation": {
+    "model": "Regex Static Analyzer",
+    "accuracy": 0.61,
+    "precision": 0,
+    "recall": 0.0,
+    "f1_score": 0,
+    "total_samples": 100,
+    "correct_predictions": 61,
+    "confusion_matrix": {
+      "true_positive": 0,
+      "true_negative": 38,
+      "false_positive": 0,
+      "false_negative": 39
+    }
+  }
+}
