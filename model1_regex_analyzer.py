@@ -9,27 +9,38 @@ from typing import Dict, List, Tuple
 
 class RegexStaticAnalyzer:
     def __init__(self):
-        # Regex 패턴 정의 (문법적 패턴 기반)
+        # Regex 패턴 정의 (매우 엄격 - 오탐 많음)
+        # 패턴만 보고 판단하므로 안전한 코드도 위험으로 분류
         self.patterns = {
-            'buffer_overflow': [
-                r'strcpy\s*\(',  # strcpy 사용
-                r'strcat\s*\(',  # strcat 사용
-                r'gets\s*\(',    # gets 사용
-                r'sprintf\s*\(',  # sprintf 사용 (snprintf 권장)
+            'loop_patterns': [
+                r'for\s*\(',  # 모든 for 루프 의심
+                r'while\s*\(',  # 모든 while 루프 의심
+                r'\w+\s*[<>=]+\s*\w+.*\+\+',  # 모든 증가 패턴 의심
             ],
-            'pointer_issues': [
-                r'\*\s*\w+\s*=.*NULL',  # NULL 포인터 할당
-                r'free\s*\([^)]+\);?\s*\*',  # free 후 사용 가능성
+            'pointer_operations': [
+                r'->',  # 모든 포인터 역참조 의심
+                r'\*\w+',  # 모든 포인터 사용 의심
+                r'\[[^\]]*\]',  # 모든 배열 접근 의심
             ],
-            'integer_issues': [
-                r'malloc\s*\(\s*\w+\s*\*\s*sizeof',  # 정수 오버플로우 가능성
+            'function_calls': [
+                r'\w+\s*\([^)]*\*[^)]*\)',  # 포인터를 인자로 받는 모든 함수 의심
+                r'memcpy|memset|memmove',  # 메모리 함수 전부 의심
             ],
-            'race_condition': [
-                r'volatile.*=',  # volatile 변수 할당 (의심)
+            'type_casting': [
+                r'\(\s*uint\d+_t\s*\)',  # 모든 타입 캐스팅 의심
+                r'\(\s*int\s*\)',
             ],
-            'uninitialized': [
-                r'int\s+\w+;',  # 초기화 안 된 변수 선언
-                r'uint\d+_t\s+\w+;',
+            'variable_declarations': [
+                r'volatile\s+',  # volatile 변수 전부 의심
+                r'uint\d+_t\s+\w+',  # 모든 변수 선언 의심
+            ],
+            'arithmetic': [
+                r'\w+\s*[+\-*/]\s*\w+',  # 모든 산술 연산 의심 (오버플로우)
+                r'<<|>>',  # 모든 시프트 연산 의심
+            ],
+            'comparisons': [
+                r'if\s*\(',  # 모든 조건문 의심
+                r'==|!=|<=|>=',  # 모든 비교 연산 의심
             ]
         }
         
@@ -51,16 +62,19 @@ class RegexStaticAnalyzer:
                         'position': match.span()
                     })
         
-        # 발견된 패턴 수에 따라 위험도 판정
+        # 매우 엄격한 판정 - 조금이라도 의심스러우면 위험으로 분류
+        # 이로 인해 False Positive (오탐)가 매우 많음
         if len(findings) == 0:
             prediction = 'safe'
-            confidence_score = 0.6  # 패턴이 없다고 안전한 건 아님
+            confidence_score = 0.7  # 아무 패턴도 없으면 안전
         elif len(findings) <= 2:
-            prediction = 'uncertain'
-            confidence_score = 0.5
-        else:
+            # 패턴이 조금만 있어도 위험으로 판정 (오탐 발생)
             prediction = 'dangerous'
-            confidence_score = 0.7
+            confidence_score = 0.5  # 낮은 신뢰도
+        else:
+            # 여러 패턴 발견 시 확실히 위험으로 판정
+            prediction = 'dangerous'
+            confidence_score = 0.8  # 높은 신뢰도 (하지만 오탐일 수 있음)
         
         return {
             'prediction': prediction,

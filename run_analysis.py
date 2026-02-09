@@ -20,7 +20,7 @@ def check_requirements():
             missing.append(package)
     
     if missing:
-        print(f"⚠️  Missing packages: {', '.join(missing)}")
+        print(f"Missing packages: {', '.join(missing)}")
         print(f"Install with: pip install {' '.join(missing)}")
         return False
     return True
@@ -36,7 +36,7 @@ def check_ollama():
     except:
         pass
     
-    print("⚠️  Ollama server not detected at http://localhost:11434")
+    print("Ollama server not detected at http://localhost:11434")
     print("   Model 2 and 3 will require Ollama with Qwen model installed")
     print("   To install: https://ollama.ai/")
     print("   Then run: ollama pull qwen2.5-coder:7b")
@@ -51,7 +51,7 @@ def run_step(step_name: str, script: str):
     result = subprocess.run([sys.executable, script])
     
     if result.returncode != 0:
-        print(f"❌ Error in {step_name}")
+        print(f"Error in {step_name}")
         return False
     
     print(f"✓ {step_name} completed")
@@ -60,8 +60,8 @@ def run_step(step_name: str, script: str):
 def main():
     print("""
 ╔═══════════════════════════════════════════════════════════╗
-║   임베디드 C 코드 의미 기반 정적 분석 프로젝트              ║
-║   Semantic Static Analysis for Embedded C Code           ║
+║   임베디드 C 코드 의미 기반 정적 분석 프로젝트                  ║
+║   Semantic Static Analysis for Embedded C Code            ║
 ╚═══════════════════════════════════════════════════════════╝
     """)
     
@@ -95,25 +95,30 @@ def main():
     if not run_step("Model 1: Regex Analyzer", "./model1_regex_analyzer.py"):
         sys.exit(1)
     
-    # Step 3 & 4: LLM 모델들 (Ollama 사용 가능 시)
+    # Step 3 & 4 & 5: LLM 모델들 (Ollama 사용 가능 시)
     if ollama_available:
         run_llm = input("\nRun LLM models? This may take several minutes (y/n): ").lower()
         if run_llm == 'y':
             if not run_step("Model 2: Vanilla LLM", "model2_vanilla_llm.py"):
-                print("⚠️  Model 2 failed, continuing...")
+                print("Model 2 failed, continuing...")
             
             if not run_step("Model 3: Enhanced LLM", "model3_enhanced_llm.py"):
-                print("⚠️  Model 3 failed, continuing...")
+                print("Model 3 failed, continuing...")
+
+            if not run_step("Model 4: Hybrid Analyzer", "model4_hybrid_analyzer.py"):
+                print("Model 3 failed, continuing...")
+
     else:
-        print("\n⚠️  Skipping LLM models (Ollama not available)")
+        print("\nSkipping LLM models (Ollama not available)")
         print("   You can run them later with:")
         print("   python model2_vanilla_llm.py")
         print("   python model3_enhanced_llm.py")
+        print("   python model4_hybrid_analyzer.py")
     
     # Step 5: 비교 및 평가
     if os.path.exists("./regex_results.json"):
         if not run_step("Model Comparison", "model_comparator.py"):
-            print("⚠️  Comparison failed")
+            print("Comparison failed")
     
     print(f"\n{'='*60}")
     print("✓ EXECUTION COMPLETE")
@@ -125,11 +130,12 @@ def main():
     if ollama_available:
         print("  - vanilla_llm_results.json (Model 2 결과)")
         print("  - enhanced_llm_results.json (Model 3 결과)")
+        print("  - hybrid_results.json (Model 4 결과)")
     
     print("  - comparison_report.json (비교 리포트)")
     print("  - model_comparison.png (비교 그래프)")
     
-    print("\n📊 Check comparison_report.json for detailed analysis")
+    print("\nCheck comparison_report.json for detailed analysis")
 
 if __name__ == "__main__":
     main()

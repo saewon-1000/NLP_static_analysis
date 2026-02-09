@@ -1,6 +1,7 @@
 """
 Model 3: 정적 분석 강화 LLM (Static Analysis-Enhanced LLM)
 정적 분석 지식을 반영하여 의미적 위험을 탐지하는 향상된 LLM
+LLM + 도메인 지식
 """
 
 import json

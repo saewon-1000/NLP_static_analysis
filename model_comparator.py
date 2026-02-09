@@ -1,6 +1,6 @@
 """
 모델 평가 및 비교 프레임워크
-3가지 모델의 성능을 비교하고 시각화
+4가지 모델의 성능을 비교하고 시각화
 """
 
 import json
@@ -75,7 +75,7 @@ class ModelComparator:
         print('='*60)
         
         # 메트릭 비교 출력
-        print("\n📊 Performance Metrics:")
+        print("\nPerformance Metrics:")
         print(f"{'Model':<35} {'Acc':>6} {'Prec':>6} {'Rec':>6} {'F1':>6}")
         print('-'*60)
         
@@ -84,14 +84,14 @@ class ModelComparator:
                   f"{metrics['recall']:>6.3f} {metrics['f1_score']:>6.3f}")
         
         # 오류 분석 출력
-        print("\n❌ Error Analysis:")
+        print("\nError Analysis:")
         for model_name, errors in report['error_analysis'].items():
             print(f"\n{model_name}:")
             print(f"  False Positives: {errors['false_positives']} ({errors['fp_rate']:.1%})")
             print(f"  False Negatives: {errors['false_negatives']} ({errors['fn_rate']:.1%})")
         
         # 요약
-        print("\n📝 Summary:")
+        print("\nSummary:")
         print(report['summary'])
         
         return report
@@ -113,23 +113,6 @@ Hypothesis Validation:
 - Best Overall Performance (F1): {best_f1_model}
 - Best Recall (Detection): {best_recall_model}
 - Best Precision (Accuracy): {best_precision_model}
-
-Key Findings:
-1. Regex-based analyzer shows limitations in detecting semantic vulnerabilities
-   that don't match predefined patterns.
-
-2. Vanilla LLM demonstrates better semantic understanding but may lack
-   domain-specific static analysis knowledge.
-
-3. Static Analysis-Enhanced LLM combines semantic understanding with
-   static analysis principles, showing improved detection of subtle bugs
-   like off-by-one errors, race conditions, and TOCTOU vulnerabilities.
-
-Conclusion:
-The hypothesis is {'SUPPORTED' if 'Enhanced' in best_f1_model else 'NEEDS MORE DATA'} - 
-LLMs augmented with static analysis domain knowledge show {'improved' if 'Enhanced' in best_f1_model else 'potential'} 
-ability to understand code intent and detect semantic vulnerabilities beyond 
-pattern matching.
 """
         return summary
     
@@ -164,7 +147,7 @@ pattern matching.
         
         plt.tight_layout()
         plt.savefig(output_file, dpi=300, bbox_inches='tight')
-        print(f"\n✓ Plot saved: {output_file}")
+        print(f"\nPlot saved: {output_file}")
         
         return output_file
 
@@ -180,7 +163,8 @@ def main():
     comparator.load_results("Model 1: Regex", "./regex_results.json")
     comparator.load_results("Model 2: Vanilla LLM", "./vanilla_llm_results.json")
     comparator.load_results("Model 3: Enhanced LLM", "./enhanced_llm_results.json")
-    
+    comparator.load_results("Model 4: Hybrid", "./hybrid_results.json")
+
     # 비교 리포트 생성
     comparator.generate_comparison_report("./comparison_report.json")
     

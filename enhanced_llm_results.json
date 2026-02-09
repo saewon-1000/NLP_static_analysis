@@ -6,20 +6,106 @@
   },
   "results": [
     {
-      "id": "safe_44",
+      "id": "safe_20",
       "true_label": "safe",
-      "predicted_label": "safe",
-      "confidence": 1.0,
-      "semantic_issues": [],
-      "severity": "none",
-      "vulnerability_type": "none",
-      "reasoning": "The function allocate_device_buffer appears to be safely allocating and initializing a buffer for a device structure. It checks if the input pointer is NULL, allocates memory using malloc, initializes it with memset, and sets the buffer size. There are no obvious semantic vulnerabilities or edge cases that could lead to issues.",
-      "affected_lines": [],
-      "correct": true,
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "semantic_issues": [
+        "buffer_overflow"
+      ],
+      "severity": "medium",
+      "vulnerability_type": "buffer_overflow",
+      "reasoning": "The code does not check if the sum of `page_addr` and `read_len` exceeds the maximum valid address in flash memory. This could lead to a buffer overflow if `page_addr + read_len` is greater than or equal to `FLASH_END_ADDR`. The condition `(len < max_read) ? len : max_read` ensures that `read_len` does not exceed `max_read`, but it does not prevent the sum of `page_addr` and `read_len` from exceeding `FLASH_END_ADDR`, which could lead to reading beyond the valid memory range.",
+      "affected_lines": [
+        "uint32_t read_len = (len < max_read) ? len : max_read;",
+        "memcpy(data, (void*)page_addr, read_len);"
+      ],
+      "correct": false,
       "true_vulnerability": null
     },
     {
-      "id": "dangerous_49",
+      "id": "dangerous_42",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "semantic_issues": [
+        "uninitialized variable"
+      ],
+      "severity": "medium",
+      "vulnerability_type": "uninitialized",
+      "reasoning": "The variable 'status' is not initialized in the else branch of the if statement. If SENSOR_REG does not contain the SENSOR_READY bit, 'status' will be used without being set, leading to an uninitialized value being returned.",
+      "affected_lines": "3-5",
+      "correct": true,
+      "true_vulnerability": "Uninitialized variable: status may be returned without initialization"
+    },
+    {
+      "id": "safe_9",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "semantic_issues": [
+        "buffer_overflow"
+      ],
+      "severity": "medium",
+      "vulnerability_type": "buffer_overflow",
+      "reasoning": "The code does not check if the sum of page_addr and read_len exceeds the maximum addressable memory, which could lead to a buffer overflow.",
+      "affected_lines": "10",
+      "correct": false,
+      "true_vulnerability": null
+    },
+    {
+      "id": "dangerous_1",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 1.0,
+      "semantic_issues": [
+        "race_condition"
+      ],
+      "severity": "high",
+      "vulnerability_type": "race_condition",
+      "reasoning": "The code does not ensure atomicity when accessing and modifying the shared_counter variable, which can lead to race conditions if this function is called from both an ISR and main code. This can result in incorrect or corrupted values of shared_counter.",
+      "affected_lines": [
+        "shared_counter = temp;"
+      ],
+      "correct": true,
+      "true_vulnerability": "Race condition: shared variable modified without atomic operation or critical section"
+    },
+    {
+      "id": "dangerous_32",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.8,
+      "semantic_issues": [
+        "race_condition"
+      ],
+      "severity": "medium",
+      "vulnerability_type": "race_condition",
+      "reasoning": "The function `write_to_device` checks if the device is ready and then writes data to it after a delay. However, there is no guarantee that the device's state remains unchanged between the check and the write operation. If another part of the code modifies the device's state (e.g., through an interrupt handler) during this time, it could lead to a race condition.",
+      "affected_lines": [
+        "device_write(data, len);"
+      ],
+      "correct": true,
+      "true_vulnerability": "TOCTOU: device state may change between check and use"
+    },
+    {
+      "id": "safe_30",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "semantic_issues": [
+        "buffer_overflow"
+      ],
+      "severity": "medium",
+      "vulnerability_type": "buffer_overflow",
+      "reasoning": "The code does not check if the read_len is within the bounds of the data buffer provided by the caller. If len is greater than the size of the data buffer, it can lead to a buffer overflow.",
+      "affected_lines": [
+        "memcpy(data, (void*)page_addr, read_len);"
+      ],
+      "correct": false,
+      "true_vulnerability": null
+    },
+    {
+      "id": "dangerous_30",
       "true_label": "dangerous",
       "predicted_label": "dangerous",
       "confidence": 1.0,
@@ -36,205 +122,42 @@
       "true_vulnerability": "Buffer overflow: destination buffer bounds not validated"
     },
     {
-      "id": "dangerous_7",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "semantic_issues": [
-        "buffer_overflow"
-      ],
-      "severity": "high",
-      "vulnerability_type": "buffer_overflow",
-      "reasoning": "The code does not check if the destination buffer 'buffer' has enough space to hold 'pkt->length' bytes, leading to a potential buffer overflow.",
-      "affected_lines": [
-        "for (int i = 0; i < pkt->length; i++) { *dest++ = *src++; }"
-      ],
-      "correct": true,
-      "true_vulnerability": "Buffer overflow: destination buffer bounds not validated"
-    },
-    {
-      "id": "safe_48",
-      "true_label": "safe",
-      "predicted_label": "safe",
-      "confidence": 1.0,
-      "semantic_issues": [],
-      "severity": "none",
-      "vulnerability_type": "none",
-      "reasoning": "The function allocate_device_buffer appears to be correctly allocating and initializing a buffer for a device structure. It checks if the input pointer is NULL, allocates memory using malloc, initializes the buffer with memset, and sets the buffer size. There are no obvious semantic issues or vulnerabilities in this code.",
-      "affected_lines": [],
-      "correct": true,
-      "true_vulnerability": null
-    },
-    {
-      "id": "dangerous_43",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 0.95,
-      "semantic_issues": [
-        "null_pointer"
-      ],
-      "severity": "medium",
-      "vulnerability_type": "null_pointer",
-      "reasoning": "The code assumes that `config->settings` is not NULL, but it does not check if it is before accessing its members (`baudrate` and `parity`). This can lead to a null pointer dereference if `config->settings` is indeed NULL.",
-      "affected_lines": "4",
-      "correct": true,
-      "true_vulnerability": "Null pointer dereference: config->settings not validated before use"
-    },
-    {
-      "id": "dangerous_3",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "semantic_issues": [
-        "bit_manipulation"
-      ],
-      "severity": "high",
-      "vulnerability_type": "bit_manipulation",
-      "reasoning": "The code is attempting to configure a GPIO pin by setting the mode in the GPIO_CONFIG register. However, it uses bitwise OR (|) instead of bitwise AND followed by OR (& |). This means that if the mode value has bits set in positions other than those corresponding to the specified pin, these bits will be preserved from the existing configuration, leading to unintended side effects. For example, if the GPIO_CONFIG register already has some bits set at positions other than the specified pin, they will not be cleared before being overwritten with the new mode value.",
-      "affected_lines": "GPIO_CONFIG = GPIO_CONFIG | (mode << pin);",
-      "correct": true,
-      "true_vulnerability": "Bit manipulation error: existing bits not cleared before setting new value"
-    },
-    {
-      "id": "safe_17",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.95,
-      "semantic_issues": [
-        "buffer_overflow"
-      ],
-      "severity": "medium",
-      "vulnerability_type": "buffer_overflow",
-      "reasoning": "The code does not check if the index 'i' is within the bounds of the sensor_data array before accessing it. This can lead to a buffer overflow if 'len' exceeds the size of sensor_data.",
-      "affected_lines": [
-        "for (size_t i = 0; i < len; i++) {",
-        "sensor_data[i] = buffer[i];"
-      ],
-      "correct": false,
-      "true_vulnerability": null
-    },
-    {
-      "id": "dangerous_33",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "semantic_issues": [
-        "integer_overflow"
-      ],
-      "severity": "high",
-      "vulnerability_type": "integer_overflow",
-      "reasoning": "The code calculates the total size by multiplying `num_sensors` with `sizeof(sensor_t)`. If `num_sensors` is large enough, this multiplication can result in an integer overflow, leading to a memory allocation of incorrect size. This can cause buffer overflows or other memory-related issues.",
-      "affected_lines": [
-        "uint16_t total_size = num_sensors * sizeof(sensor_t);"
-      ],
-      "correct": true,
-      "true_vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation"
-    },
-    {
-      "id": "safe_20",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.95,
-      "semantic_issues": [
-        "buffer_overflow"
-      ],
-      "severity": "medium",
-      "vulnerability_type": "buffer_overflow",
-      "reasoning": "The code does not check if the index 'i' is within the bounds of the sensor_data array before accessing it. This can lead to a buffer overflow if 'len' is greater than the size of the sensor_data array.",
-      "affected_lines": [
-        "for (size_t i = 0; i < len; i++) {",
-        "sensor_data[i] = buffer[i];"
-      ],
-      "correct": false,
-      "true_vulnerability": null
-    },
-    {
-      "id": "dangerous_34",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 0.8,
-      "semantic_issues": [
-        "race_condition"
-      ],
-      "severity": "medium",
-      "vulnerability_type": "race_condition",
-      "reasoning": "The function `write_to_device` checks if the device is ready before writing data to it. However, there is a potential race condition between the check and the use of `device_write`. If another part of the code changes the state of the device (e.g., making it not ready) after the check but before the write operation, the function will still proceed with the write, which could lead to an error or unexpected behavior.",
-      "affected_lines": [
-        "if (device_ready()) {",
-        "    delay_ms(10);",
-        "    device_write(data, len);"
-      ],
-      "correct": true,
-      "true_vulnerability": "TOCTOU: device state may change between check and use"
-    },
-    {
-      "id": "safe_21",
-      "true_label": "safe",
-      "predicted_label": "safe",
-      "confidence": 1.0,
-      "semantic_issues": [],
-      "severity": "none",
-      "vulnerability_type": "none",
-      "reasoning": "The function `read_adc_value` reads a raw ADC value and ensures it is within the valid range for a 12-bit ADC (0 to 4095). The code does not have any semantic vulnerabilities, as it correctly checks if the raw value exceeds the maximum allowed value and clamps it accordingly. There are no assumptions that could go wrong, and the function handles edge cases properly.",
-      "affected_lines": [],
-      "correct": true,
-      "true_vulnerability": null
-    },
-    {
-      "id": "safe_2",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.95,
-      "semantic_issues": [
-        "buffer_overflow"
-      ],
-      "severity": "medium",
-      "vulnerability_type": "buffer_overflow",
-      "reasoning": "The code does not check if the index `i` is within the bounds of the `sensor_data` array before accessing it. This can lead to a buffer overflow if `len` is greater than the size of `sensor_data`, as `sensor_data[i] = buffer[i];` will write beyond the allocated memory for `sensor_data`. The check `len > MAX_BUFFER_SIZE` does not prevent this issue because it only checks that `len` is less than or equal to `MAX_BUFFER_SIZE`, but it does not ensure that `sensor_data` has enough space.",
-      "affected_lines": [
-        "for (size_t i = 0; i < len; i++) {",
-        "sensor_data[i] = buffer[i];"
-      ],
-      "correct": false,
-      "true_vulnerability": null
-    },
-    {
-      "id": "safe_11",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.95,
-      "semantic_issues": [
-        "off-by-one error"
-      ],
-      "severity": "medium",
-      "vulnerability_type": "buffer_overflow",
-      "reasoning": "The code increments `rx_buffer_index` before checking if it is less than `RX_BUFFER_SIZE`. This means that if `rx_buffer_index` reaches `RX_BUFFER_SIZE`, the next increment will cause an off-by-one error, leading to buffer overflow.",
-      "affected_lines": [
-        "if (rx_buffer_index < RX_BUFFER_SIZE) {",
-        "rx_buffer[rx_buffer_index++] = data;"
-      ],
-      "correct": false,
-      "true_vulnerability": null
-    },
-    {
       "id": "dangerous_16",
       "true_label": "dangerous",
       "predicted_label": "dangerous",
       "confidence": 1.0,
       "semantic_issues": [
-        "bit_manipulation"
+        "type_truncation"
       ],
       "severity": "high",
-      "vulnerability_type": "bit_manipulation",
-      "reasoning": "The code attempts to configure a GPIO pin by setting the mode in the GPIO_CONFIG register using bitwise OR and left shift operations. However, it does not clear the existing bits at the specified position before setting the new mode. This can lead to unintended bit manipulation, where the existing configuration is not properly cleared, potentially causing unexpected behavior or errors.",
+      "vulnerability_type": "type_truncation",
+      "reasoning": "The code truncates a 32-bit unsigned integer (period_us) to a 16-bit unsigned integer, which can lead to data loss. If period_us is greater than 65535, the upper bits will be discarded, resulting in an incorrect value being written to TIMER_PERIOD.",
       "affected_lines": [
-        "GPIO_CONFIG = GPIO_CONFIG | (mode << pin);"
+        "TIMER_PERIOD = (uint16_t)period_us;"
       ],
       "correct": true,
-      "true_vulnerability": "Bit manipulation error: existing bits not cleared before setting new value"
+      "true_vulnerability": "Type truncation: 32-bit value truncated to 16-bit without validation"
     },
     {
-      "id": "dangerous_32",
+      "id": "safe_37",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "semantic_issues": [
+        "buffer_overflow"
+      ],
+      "severity": "medium",
+      "vulnerability_type": "buffer_overflow",
+      "reasoning": "The code does not check if the index 'i' is within the bounds of the sensor_data array before accessing it. This can lead to a buffer overflow if the length of the input buffer exceeds the size of the sensor_data array.",
+      "affected_lines": [
+        "for (size_t i = 0; i < len; i++) {",
+        "sensor_data[i] = buffer[i];"
+      ],
+      "correct": false,
+      "true_vulnerability": null
+    },
+    {
+      "id": "dangerous_25",
       "true_label": "dangerous",
       "predicted_label": "dangerous",
       "confidence": 1.0,
@@ -249,7 +172,65 @@
       "true_vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)"
     },
     {
-      "id": "safe_35",
+      "id": "safe_28",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 0.95,
+      "semantic_issues": [],
+      "severity": "none",
+      "vulnerability_type": "none",
+      "reasoning": "The code appears to be a UART interrupt handler that reads data from the UART receive register and stores it in an RX buffer if there is space available. The logic checks for buffer overflow and handles it by incrementing an error count. There are no obvious semantic issues or vulnerabilities based on the provided code snippet.",
+      "affected_lines": [],
+      "correct": true,
+      "true_vulnerability": null
+    },
+    {
+      "id": "safe_4",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 1.0,
+      "semantic_issues": [],
+      "severity": "none",
+      "vulnerability_type": "none",
+      "reasoning": "The function `read_adc_value` reads a raw ADC value and ensures it is within the valid range for a 12-bit ADC (0 to 4095). The code does not contain any semantic vulnerabilities, as it correctly checks if the raw value exceeds the maximum allowed value and clamps it accordingly. There are no assumptions that could be bypassed or edge cases that could lead to issues. The function is safe in all execution paths and does not involve concurrency.",
+      "affected_lines": [],
+      "correct": true,
+      "true_vulnerability": null
+    },
+    {
+      "id": "dangerous_39",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "semantic_issues": [
+        "early return without freeing message"
+      ],
+      "severity": "medium",
+      "vulnerability_type": "memory_leak",
+      "reasoning": "The function process_messages allocates a message using allocate_message() and then checks the priority of the message. If the priority is above PRIORITY_THRESHOLD, it handles the high-priority message and returns early without freeing the allocated message. This leads to a memory leak because the allocated memory for msg is not freed in all execution paths.",
+      "affected_lines": [
+        "return;"
+      ],
+      "correct": true,
+      "true_vulnerability": "Memory leak: allocated message not freed on early return"
+    },
+    {
+      "id": "dangerous_15",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 1.0,
+      "semantic_issues": [
+        "off-by-one error"
+      ],
+      "severity": "high",
+      "vulnerability_type": "buffer_overflow",
+      "reasoning": "The code uses '<=' in the loop condition, which leads to an off-by-one error. When i equals len, it attempts to access uart_buffer[len], which is out of bounds since array indices are zero-based and go up to BUFFER_SIZE - 1.",
+      "affected_lines": "for (int i = 0; i <= len; i++)",
+      "correct": true,
+      "true_vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)"
+    },
+    {
+      "id": "safe_43",
       "true_label": "safe",
       "predicted_label": "dangerous",
       "confidence": 0.95,
@@ -260,97 +241,110 @@
       "vulnerability_type": "buffer_overflow",
       "reasoning": "The code does not check if the sum of `page_addr` and `read_len` exceeds the maximum addressable memory, which could lead to a buffer overflow.",
       "affected_lines": [
-        "uint32_t max_read = FLASH_END_ADDR - page_addr;",
-        "size_t read_len = (len < max_read) ? len : max_read;"
+        "10",
+        "12"
       ],
       "correct": false,
       "true_vulnerability": null
     },
     {
-      "id": "dangerous_21",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "semantic_issues": [
-        "buffer_overflow"
-      ],
-      "severity": "high",
-      "vulnerability_type": "buffer_overflow",
-      "reasoning": "The code does not check if the destination buffer 'buffer' has enough space to hold 'pkt->length' bytes of data. This can lead to a buffer overflow, where data from 'src' overwrites memory beyond the intended destination, potentially causing crashes or security vulnerabilities.",
-      "affected_lines": [
-        "for (int i = 0; i < pkt->length; i++) { *dest++ = *src++; }"
-      ],
-      "correct": true,
-      "true_vulnerability": "Buffer overflow: destination buffer bounds not validated"
-    },
-    {
-      "id": "safe_32",
+      "id": "safe_22",
       "true_label": "safe",
       "predicted_label": "safe",
-      "confidence": 1.0,
+      "confidence": 0.95,
       "semantic_issues": [],
       "severity": "none",
       "vulnerability_type": "none",
-      "reasoning": "The function allocate_device_buffer appears to be correctly allocating and initializing a buffer for a device. It checks if the input pointer is NULL, allocates memory using malloc, initializes it with memset, and sets the buffer size. There are no obvious semantic issues or vulnerabilities in this code.",
+      "reasoning": "The code appears to be a UART interrupt handler that reads data from the UART receive register and stores it in an RX buffer. The code checks if there is space available in the buffer before storing the received data, which prevents buffer overflow. There are no obvious semantic issues or vulnerabilities present.",
       "affected_lines": [],
       "correct": true,
       "true_vulnerability": null
     },
     {
-      "id": "dangerous_40",
+      "id": "dangerous_5",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "semantic_issues": [
+        "null_pointer"
+      ],
+      "severity": "medium",
+      "vulnerability_type": "null_pointer",
+      "reasoning": "The code assumes that `config->settings` is not NULL, but it does not check if it is before dereferencing it. This can lead to a null pointer dereference if `config->settings` is indeed NULL.",
+      "affected_lines": "config->settings->baudrate = 115200;",
+      "correct": true,
+      "true_vulnerability": "Null pointer dereference: config->settings not validated before use"
+    },
+    {
+      "id": "dangerous_28",
       "true_label": "dangerous",
       "predicted_label": "dangerous",
       "confidence": 1.0,
       "semantic_issues": [
-        "bit_manipulation"
+        "off-by-one error"
       ],
       "severity": "high",
-      "vulnerability_type": "bit_manipulation",
-      "reasoning": "The code attempts to configure a GPIO pin by setting the mode in the GPIO_CONFIG register. However, it does not clear the existing bits before setting the new mode, which can lead to unexpected behavior if the same pin is configured multiple times. This is because bitwise OR operation (|) will set bits without clearing them, potentially overriding other configurations.",
-      "affected_lines": [
-        "GPIO_CONFIG = GPIO_CONFIG | (mode << pin);"
-      ],
+      "vulnerability_type": "buffer_overflow",
+      "reasoning": "The loop condition uses 'i <= len' instead of 'i < len', which leads to an off-by-one error. When i equals len, the code attempts to access uart_buffer[len], which is out of bounds since array indices are zero-based and go up to BUFFER_SIZE - 1.",
+      "affected_lines": "for (int i = 0; i <= len; i++)",
       "correct": true,
-      "true_vulnerability": "Bit manipulation error: existing bits not cleared before setting new value"
+      "true_vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)"
     },
     {
-      "id": "safe_22",
-      "true_label": "safe",
+      "id": "dangerous_11",
+      "true_label": "dangerous",
       "predicted_label": "dangerous",
       "confidence": 0.95,
       "semantic_issues": [
-        "buffer_overflow"
+        "null_pointer"
       ],
       "severity": "medium",
-      "vulnerability_type": "buffer_overflow",
-      "reasoning": "The code does not check if the index `i` is within bounds when accessing `sensor_data`. This can lead to a buffer overflow if `len` is greater than the size of `sensor_data`, as it will write beyond the allocated memory.",
+      "vulnerability_type": "null_pointer",
+      "reasoning": "The code assumes that `config->settings` is not NULL, but it does not check if it is before dereferencing it. If `config->settings` is NULL, accessing its members (like `baudrate` and `parity`) will lead to a null pointer dereference, which can cause undefined behavior, crashes, or security vulnerabilities.",
       "affected_lines": [
-        "for (size_t i = 0; i < len; i++) {",
-        "sensor_data[i] = buffer[i];"
+        "config->settings->baudrate = 115200;",
+        "config->settings->parity = PARITY_NONE;"
       ],
-      "correct": false,
-      "true_vulnerability": null
+      "correct": true,
+      "true_vulnerability": "Null pointer dereference: config->settings not validated before use"
+    },
+    {
+      "id": "dangerous_49",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 1.0,
+      "semantic_issues": [
+        "buffer_overflow"
+      ],
+      "severity": "high",
+      "vulnerability_type": "buffer_overflow",
+      "reasoning": "The code does not check if the destination buffer 'buffer' has enough space to hold 'pkt->length' bytes of data. This can lead to a buffer overflow, where data from 'src' overwrites memory beyond the intended bounds of 'buffer', potentially causing undefined behavior or security vulnerabilities.",
+      "affected_lines": [
+        "for (int i = 0; i < pkt->length; i++) { *dest++ = *src++; }"
+      ],
+      "correct": true,
+      "true_vulnerability": "Buffer overflow: destination buffer bounds not validated"
     }
   ],
   "evaluation": {
     "model": "Static Analysis-Enhanced LLM",
-    "accuracy": 0.7,
-    "precision": 0.625,
+    "accuracy": 0.75,
+    "precision": 0.7058823529411765,
     "recall": 1.0,
-    "f1_score": 0.7692307692307693,
-    "avg_confidence": 0.9724999999999999,
+    "f1_score": 0.8275862068965517,
+    "avg_confidence": 0.9625,
     "total_samples": 20,
-    "correct_predictions": 14,
+    "correct_predictions": 15,
     "confusion_matrix": {
-      "true_positive": 10,
-      "true_negative": 4,
-      "false_positive": 6,
+      "true_positive": 12,
+      "true_negative": 3,
+      "false_positive": 5,
       "false_negative": 0
     },
     "severity_distribution": {
-      "none": 4,
-      "high": 8,
-      "medium": 8
+      "medium": 10,
+      "high": 7,
+      "none": 3
     }
   }
 }

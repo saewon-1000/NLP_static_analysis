@@ -1,0 +1,323 @@
+{
+  "model_info": {
+    "name": "qwen2.5-coder:7b",
+    "type": "Hybrid (Regex + LLM)",
+    "strategy": "1st stage: Regex screening, 2nd stage: LLM verification"
+  },
+  "results": [
+    {
+      "id": "safe_20",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 8,
+      "actual_vulnerabilities": [
+        "Potential buffer overflow in memcpy call"
+      ],
+      "false_alarms": [],
+      "reasoning": "The code does not validate the length of data before copying it to the destination buffer, which could lead to a buffer overflow if read_len exceeds the size of the data array. The NULL check for 'data' is correct, but there's no validation on the size of 'data'.",
+      "correct": false
+    },
+    {
+      "id": "dangerous_42",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 5,
+      "actual_vulnerabilities": [
+        "Potential uninitialized variable return: The function `read_sensor_status` returns the variable `status` without initializing it in all code paths. If `SENSOR_REG & SENSOR_READY` is false, `status` will be returned with an undefined value."
+      ],
+      "false_alarms": [],
+      "reasoning": "The regex patterns found are not directly related to the vulnerabilities in this code snippet. The actual vulnerability lies in the potential uninitialized return of the function. The regex patterns might have been flagged due to common syntax errors or comments that contain slashes, but they do not indicate any security issues in this context.",
+      "correct": true
+    },
+    {
+      "id": "safe_9",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 8,
+      "actual_vulnerabilities": [
+        "Potential buffer overflow in memcpy due to incorrect calculation of read_len."
+      ],
+      "false_alarms": [],
+      "reasoning": "The code attempts to read from a flash memory page into a buffer using memcpy, but the length of data to be copied (read_len) is calculated incorrectly. The condition `(len < max_read) ? len : max_read` should be `(len <= max_read) ? len : max_read` to ensure that the copy operation does not exceed the bounds of the buffer.",
+      "correct": false
+    },
+    {
+      "id": "dangerous_1",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 7,
+      "actual_vulnerabilities": [
+        "The code does not ensure atomicity when incrementing the shared_counter, which can lead to race conditions."
+      ],
+      "false_alarms": [],
+      "reasoning": "The 'volatile' keyword is used correctly to indicate that the value of shared_counter may change unexpectedly. The '/' and '+' symbols are part of standard arithmetic operations in C. However, the lack of synchronization mechanisms (like mutexes or atomic operations) when accessing and modifying shared_counter makes this code dangerous as it can lead to race conditions where multiple threads or ISRs could increment the counter simultaneously, resulting in incorrect values.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_32",
+      "true_label": "dangerous",
+      "predicted_label": "safe",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 10,
+      "actual_vulnerabilities": [],
+      "false_alarms": [
+        "function_calls",
+        "suspicious_patterns"
+      ],
+      "reasoning": "The code snippet provided does not contain any obvious vulnerabilities such as NULL pointer dereferences, out-of-bounds array accesses, incorrect loop conditions, or improper validation before operations. The regex patterns flagged were likely false alarms in this context.",
+      "correct": false
+    },
+    {
+      "id": "safe_30",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 1.0,
+      "stage": "hybrid",
+      "regex_findings": 8,
+      "actual_vulnerabilities": [],
+      "false_alarms": [
+        "function_calls: memcpy(data, (void*)",
+        "function_calls: memcpy"
+      ],
+      "reasoning": "The code performs proper NULL checks before dereferencing the 'data' pointer and ensures that the read length does not exceed the available memory. The use of 'memcpy' is safe as it copies data from a valid memory address to another valid memory location.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_30",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 25,
+      "actual_vulnerabilities": [
+        "dest 버퍼 경계 체크 없음"
+      ],
+      "false_alarms": [],
+      "reasoning": "The code does not check if the destination buffer 'buffer' has enough space to hold the data being copied from 'src'. This can lead to a buffer overflow, which is a serious security vulnerability.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_16",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 7,
+      "actual_vulnerabilities": [
+        "Data loss: Casting uint32_t to uint16_t can result in data loss if period_us is greater than 65535."
+      ],
+      "false_alarms": [],
+      "reasoning": "The code casts a 32-bit unsigned integer (uint32_t) to a 16-bit unsigned integer (uint16_t), which can lead to data loss if the value of period_us exceeds 65535. This is a known vulnerability and should be avoided.",
+      "correct": true
+    },
+    {
+      "id": "safe_37",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 1.0,
+      "stage": "hybrid",
+      "regex_findings": 8,
+      "actual_vulnerabilities": [],
+      "false_alarms": [
+        "loop_patterns",
+        "array_access"
+      ],
+      "reasoning": "The code includes proper NULL checks before pointer dereferences, ensures array accesses are within bounds, uses the correct loop condition (<), and validates inputs before operations. The regex patterns flagged as suspicious are used safely in context.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_25",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 14,
+      "actual_vulnerabilities": [
+        "off-by-one error in loop condition"
+      ],
+      "false_alarms": [],
+      "reasoning": "The loop condition `i <= len` is dangerous because it allows accessing an out-of-bounds element of the array `uart_buffer`. The correct condition should be `i < len` to avoid reading past the end of the buffer, which could lead to undefined behavior or security vulnerabilities.",
+      "correct": true
+    },
+    {
+      "id": "safe_28",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 1.0,
+      "stage": "hybrid",
+      "regex_findings": 11,
+      "actual_vulnerabilities": [],
+      "false_alarms": [
+        "pointer_operations: ->",
+        "array_access: [rx_buffer_index++]"
+      ],
+      "reasoning": "The code does not contain any dangerous patterns when analyzed in context. The pointer dereference is safe as it checks if the UART->SR & UART_SR_RXNE condition before accessing UART->DR. The array access is within bounds because it checks if rx_buffer_index < RX_BUFFER_SIZE before writing to rx_buffer[rx_buffer_index++]. There are no loop conditions or operations that require validation. The suspicious patterns flagged by regex are actually safe in this context.",
+      "correct": true
+    },
+    {
+      "id": "safe_4",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 1.0,
+      "stage": "hybrid",
+      "regex_findings": 7,
+      "actual_vulnerabilities": [],
+      "false_alarms": [
+        "pointer_operations",
+        "type_operations",
+        "suspicious_patterns"
+      ],
+      "reasoning": "The code snippet provided is safe from the flagged patterns. It does not perform any pointer dereferences, array accesses, or operations that could lead to vulnerabilities. The regex flags are false alarms in this context.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_39",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.9,
+      "stage": "hybrid",
+      "regex_findings": 8,
+      "actual_vulnerabilities": [
+        "early return without freeing msg"
+      ],
+      "false_alarms": [
+        "pointer_operations: ->",
+        "pointer_operations: *msg =",
+        "function_calls: free",
+        "suspicious_patterns: if (",
+        "suspicious_patterns: *"
+      ],
+      "reasoning": "The code has an early return without freeing the allocated message, which can lead to a memory leak. The regex patterns flagged are not necessarily dangerous in this context.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_15",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 14,
+      "actual_vulnerabilities": [
+        "off-by-one error in loop condition"
+      ],
+      "false_alarms": [],
+      "reasoning": "The loop condition `i <= len` is dangerous because it allows accessing an out-of-bounds element of the array `uart_buffer`. The correct condition should be `i < len` to avoid accessing memory outside the allocated buffer, which could lead to undefined behavior or security vulnerabilities.",
+      "correct": true
+    },
+    {
+      "id": "safe_43",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 8,
+      "actual_vulnerabilities": [
+        "Potential buffer overflow in memcpy due to incorrect calculation of read_len."
+      ],
+      "false_alarms": [],
+      "reasoning": "The code attempts to read from a flash memory page into the provided data buffer using memcpy. However, the calculation of read_len does not account for the possibility that page_addr might be at or near FLASH_END_ADDR, which could lead to reading beyond the valid range of the data array if len is large enough. This could result in a buffer overflow.",
+      "correct": false
+    },
+    {
+      "id": "safe_22",
+      "true_label": "safe",
+      "predicted_label": "safe",
+      "confidence": 1.0,
+      "stage": "hybrid",
+      "regex_findings": 11,
+      "actual_vulnerabilities": [],
+      "false_alarms": [
+        "pointer_operations: ->",
+        "array_access: [rx_buffer_index++]"
+      ],
+      "reasoning": "The code snippet provided is safe from the flagged patterns. The pointer dereference (UART->SR and UART->DR) is done within a conditional check that ensures UART->SR has the RXNE bit set, preventing a NULL pointer dereference. The array access (rx_buffer[rx_buffer_index++]) is protected by a condition that checks if rx_buffer_index is less than RX_BUFFER_SIZE, ensuring it stays within bounds. There are no loop conditions to consider in this snippet. No validation is needed before operations as the conditions already ensure safety.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_5",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 17,
+      "actual_vulnerabilities": [
+        "NULL pointer dereference in config->settings"
+      ],
+      "false_alarms": [],
+      "reasoning": "The code does not check if config or config->settings is NULL before dereferencing them. This can lead to a segmentation fault if either of these pointers is NULL.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_28",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 14,
+      "actual_vulnerabilities": [
+        "off-by-one error in loop condition"
+      ],
+      "false_alarms": [],
+      "reasoning": "The loop condition `i <= len` is dangerous because it allows accessing an out-of-bounds element of the array `uart_buffer`. The correct condition should be `i < len` to ensure that all elements within bounds are accessed.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_11",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 17,
+      "actual_vulnerabilities": [
+        "NULL pointer dereference in config->settings"
+      ],
+      "false_alarms": [],
+      "reasoning": "The code does not check if config or config->settings is NULL before dereferencing them. This can lead to a segmentation fault if either of these pointers is NULL.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_49",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "stage": "hybrid",
+      "regex_findings": 25,
+      "actual_vulnerabilities": [
+        "dest 버퍼 경계 체크 없음"
+      ],
+      "false_alarms": [],
+      "reasoning": "The code does not check if the destination buffer 'buffer' has enough space to hold the data being copied from 'src'. This can lead to a buffer overflow, which is a significant security vulnerability.",
+      "correct": true
+    }
+  ],
+  "evaluation": {
+    "model": "Hybrid (Regex + LLM)",
+    "accuracy": 0.8,
+    "precision": 0.7857142857142857,
+    "recall": 0.9166666666666666,
+    "f1_score": 0.8461538461538461,
+    "avg_confidence": 0.96,
+    "total_samples": 20,
+    "correct_predictions": 16,
+    "confusion_matrix": {
+      "true_positive": 11,
+      "true_negative": 5,
+      "false_positive": 3,
+      "false_negative": 1
+    },
+    "stage_distribution": {
+      "regex_only": 0,
+      "hybrid": 20,
+      "llm_usage_rate": 1.0
+    }
+  }
+}

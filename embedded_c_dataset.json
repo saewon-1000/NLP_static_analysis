@@ -1,141 +1,6 @@
 [
   {
-    "id": "safe_44",
-    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
-    "label": "safe",
-    "category": "memory_management",
-    "description": "Proper memory allocation with error checking",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_49",
-    "code": "void copy_packet_data(packet_t *pkt) {\n    uint8_t *src = pkt->data;\n    uint8_t *dest = buffer;\n    \n    // pkt->length가 검증되지 않음\n    for (int i = 0; i < pkt->length; i++) {\n        *dest++ = *src++;  // 위험: dest 버퍼 경계 체크 없음\n    }\n}",
-    "label": "dangerous",
-    "category": "pointer_arithmetic",
-    "description": "Unchecked pointer arithmetic in loop",
-    "vulnerability": "Buffer overflow: destination buffer bounds not validated",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_7",
-    "code": "void copy_packet_data(packet_t *pkt) {\n    uint8_t *src = pkt->data;\n    uint8_t *dest = buffer;\n    \n    // pkt->length가 검증되지 않음\n    for (int i = 0; i < pkt->length; i++) {\n        *dest++ = *src++;  // 위험: dest 버퍼 경계 체크 없음\n    }\n}",
-    "label": "dangerous",
-    "category": "pointer_arithmetic",
-    "description": "Unchecked pointer arithmetic in loop",
-    "vulnerability": "Buffer overflow: destination buffer bounds not validated",
-    "severity": "high"
-  },
-  {
-    "id": "safe_48",
-    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
-    "label": "safe",
-    "category": "memory_management",
-    "description": "Proper memory allocation with error checking",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_43",
-    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
-    "label": "dangerous",
-    "category": "null_pointer",
-    "description": "Unchecked nested pointer dereference",
-    "vulnerability": "Null pointer dereference: config->settings not validated before use",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_3",
-    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
-    "label": "dangerous",
-    "category": "bit_manipulation",
-    "description": "Incorrect bit masking operation",
-    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
-    "severity": "medium"
-  },
-  {
-    "id": "safe_17",
-    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
-    "label": "safe",
-    "category": "buffer_handling",
-    "description": "Proper bounds checking and null pointer validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_33",
-    "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
-    "label": "dangerous",
-    "category": "integer_overflow",
-    "description": "Integer overflow in size calculation",
-    "vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation",
-    "severity": "critical"
-  },
-  {
     "id": "safe_20",
-    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
-    "label": "safe",
-    "category": "buffer_handling",
-    "description": "Proper bounds checking and null pointer validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_34",
-    "code": "void write_to_device(uint8_t *data, size_t len) {\n    if (device_ready()) {  // Check\n        delay_ms(10);  // 지연 추가\n        device_write(data, len);  // Use - 이 사이에 상태 변경 가능\n    }\n}",
-    "label": "dangerous",
-    "category": "toctou",
-    "description": "Time-of-check to time-of-use vulnerability",
-    "vulnerability": "TOCTOU: device state may change between check and use",
-    "severity": "medium"
-  },
-  {
-    "id": "safe_21",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_2",
-    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
-    "label": "safe",
-    "category": "buffer_handling",
-    "description": "Proper bounds checking and null pointer validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_11",
-    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
-    "label": "safe",
-    "category": "interrupt_handling",
-    "description": "Safe interrupt handler with overflow protection",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_16",
-    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
-    "label": "dangerous",
-    "category": "bit_manipulation",
-    "description": "Incorrect bit masking operation",
-    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
-    "severity": "medium"
-  },
-  {
-    "id": "dangerous_32",
-    "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
-    "label": "dangerous",
-    "category": "buffer_overflow",
-    "description": "Off-by-one error in loop condition",
-    "vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)",
-    "severity": "high"
-  },
-  {
-    "id": "safe_35",
     "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
     "label": "safe",
     "category": "pointer_arithmetic",
@@ -144,83 +9,20 @@
     "severity": "none"
   },
   {
-    "id": "dangerous_21",
-    "code": "void copy_packet_data(packet_t *pkt) {\n    uint8_t *src = pkt->data;\n    uint8_t *dest = buffer;\n    \n    // pkt->length가 검증되지 않음\n    for (int i = 0; i < pkt->length; i++) {\n        *dest++ = *src++;  // 위험: dest 버퍼 경계 체크 없음\n    }\n}",
+    "id": "dangerous_42",
+    "code": "int read_sensor_status(void) {\n    int status;\n    \n    if (SENSOR_REG & SENSOR_READY) {\n        status = SENSOR_REG_STATUS;\n    }\n    // else 분기에서 status 초기화 안 됨\n    \n    return status;  // 위험: 초기화 안 된 값 반환 가능\n}",
     "label": "dangerous",
-    "category": "pointer_arithmetic",
-    "description": "Unchecked pointer arithmetic in loop",
-    "vulnerability": "Buffer overflow: destination buffer bounds not validated",
-    "severity": "high"
-  },
-  {
-    "id": "safe_32",
-    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
-    "label": "safe",
-    "category": "memory_management",
-    "description": "Proper memory allocation with error checking",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_40",
-    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
-    "label": "dangerous",
-    "category": "bit_manipulation",
-    "description": "Incorrect bit masking operation",
-    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
+    "category": "uninitialized_variable",
+    "description": "Potentially uninitialized variable return",
+    "vulnerability": "Uninitialized variable: status may be returned without initialization",
     "severity": "medium"
   },
   {
-    "id": "safe_22",
-    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
-    "label": "safe",
-    "category": "buffer_handling",
-    "description": "Proper bounds checking and null pointer validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_10",
-    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
-    "label": "safe",
-    "category": "interrupt_handling",
-    "description": "Safe interrupt handler with overflow protection",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_15",
-    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
-    "label": "safe",
-    "category": "buffer_handling",
-    "description": "Proper bounds checking and null pointer validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_16",
+    "id": "safe_9",
     "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
     "label": "safe",
     "category": "pointer_arithmetic",
     "description": "Safe flash memory read with boundary checks",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_15",
-    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
-    "label": "dangerous",
-    "category": "bit_manipulation",
-    "description": "Incorrect bit masking operation",
-    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
-    "severity": "medium"
-  },
-  {
-    "id": "safe_23",
-    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
-    "label": "safe",
-    "category": "interrupt_handling",
-    "description": "Safe interrupt handler with overflow protection",
     "vulnerability": null,
     "severity": "none"
   },
@@ -234,58 +36,13 @@
     "severity": "high"
   },
   {
-    "id": "dangerous_13",
-    "code": "void set_timer_period(uint32_t period_us) {\n    // 32비트를 16비트로 자르면서 상위 비트 손실\n    TIMER_PERIOD = (uint16_t)period_us;  // 위험: 데이터 손실\n    \n    // period_us가 65535보다 크면 의도치 않은 동작\n}",
+    "id": "dangerous_32",
+    "code": "void write_to_device(uint8_t *data, size_t len) {\n    if (device_ready()) {  // Check\n        delay_ms(10);  // 지연 추가\n        device_write(data, len);  // Use - 이 사이에 상태 변경 가능\n    }\n}",
     "label": "dangerous",
-    "category": "type_truncation",
-    "description": "Type truncation leading to data loss",
-    "vulnerability": "Type truncation: 32-bit value truncated to 16-bit without validation",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_0",
-    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
-    "label": "dangerous",
-    "category": "null_pointer",
-    "description": "Unchecked nested pointer dereference",
-    "vulnerability": "Null pointer dereference: config->settings not validated before use",
-    "severity": "high"
-  },
-  {
-    "id": "safe_1",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_13",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_18",
-    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
-    "label": "safe",
-    "category": "pointer_arithmetic",
-    "description": "Safe flash memory read with boundary checks",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_49",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
+    "category": "toctou",
+    "description": "Time-of-check to time-of-use vulnerability",
+    "vulnerability": "TOCTOU: device state may change between check and use",
+    "severity": "medium"
   },
   {
     "id": "safe_30",
@@ -297,7 +54,16 @@
     "severity": "none"
   },
   {
-    "id": "dangerous_41",
+    "id": "dangerous_30",
+    "code": "void copy_packet_data(packet_t *pkt) {\n    uint8_t *src = pkt->data;\n    uint8_t *dest = buffer;\n    \n    // pkt->length가 검증되지 않음\n    for (int i = 0; i < pkt->length; i++) {\n        *dest++ = *src++;  // 위험: dest 버퍼 경계 체크 없음\n    }\n}",
+    "label": "dangerous",
+    "category": "pointer_arithmetic",
+    "description": "Unchecked pointer arithmetic in loop",
+    "vulnerability": "Buffer overflow: destination buffer bounds not validated",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_16",
     "code": "void set_timer_period(uint32_t period_us) {\n    // 32비트를 16비트로 자르면서 상위 비트 손실\n    TIMER_PERIOD = (uint16_t)period_us;  // 위험: 데이터 손실\n    \n    // period_us가 65535보다 크면 의도치 않은 동작\n}",
     "label": "dangerous",
     "category": "type_truncation",
@@ -306,22 +72,13 @@
     "severity": "high"
   },
   {
-    "id": "safe_42",
-    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
+    "id": "safe_37",
+    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
     "label": "safe",
-    "category": "interrupt_handling",
-    "description": "Safe interrupt handler with overflow protection",
+    "category": "buffer_handling",
+    "description": "Proper bounds checking and null pointer validation",
     "vulnerability": null,
     "severity": "none"
-  },
-  {
-    "id": "dangerous_24",
-    "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
-    "label": "dangerous",
-    "category": "integer_overflow",
-    "description": "Integer overflow in size calculation",
-    "vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation",
-    "severity": "critical"
   },
   {
     "id": "dangerous_25",
@@ -333,70 +90,7 @@
     "severity": "high"
   },
   {
-    "id": "safe_14",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
     "id": "safe_28",
-    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
-    "label": "safe",
-    "category": "memory_management",
-    "description": "Proper memory allocation with error checking",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_36",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_30",
-    "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
-    "label": "dangerous",
-    "category": "integer_overflow",
-    "description": "Integer overflow in size calculation",
-    "vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation",
-    "severity": "critical"
-  },
-  {
-    "id": "safe_9",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_37",
-    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
-    "label": "safe",
-    "category": "pointer_arithmetic",
-    "description": "Safe flash memory read with boundary checks",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_31",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_5",
     "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
     "label": "safe",
     "category": "interrupt_handling",
@@ -405,25 +99,7 @@
     "severity": "none"
   },
   {
-    "id": "dangerous_22",
-    "code": "void set_timer_period(uint32_t period_us) {\n    // 32비트를 16비트로 자르면서 상위 비트 손실\n    TIMER_PERIOD = (uint16_t)period_us;  // 위험: 데이터 손실\n    \n    // period_us가 65535보다 크면 의도치 않은 동작\n}",
-    "label": "dangerous",
-    "category": "type_truncation",
-    "description": "Type truncation leading to data loss",
-    "vulnerability": "Type truncation: 32-bit value truncated to 16-bit without validation",
-    "severity": "high"
-  },
-  {
     "id": "safe_4",
-    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
-    "label": "safe",
-    "category": "memory_management",
-    "description": "Proper memory allocation with error checking",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_46",
     "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
     "label": "safe",
     "category": "type_conversion",
@@ -432,7 +108,16 @@
     "severity": "none"
   },
   {
-    "id": "dangerous_26",
+    "id": "dangerous_39",
+    "code": "void process_messages(void) {\n    message_t *msg = allocate_message();\n    \n    if (msg->priority > PRIORITY_THRESHOLD) {\n        handle_high_priority(msg);\n        return;  // 위험: early return, msg 해제 안 됨\n    }\n    \n    handle_normal_priority(msg);\n    free_message(msg);\n}",
+    "label": "dangerous",
+    "category": "memory_leak",
+    "description": "Memory leak on early return path",
+    "vulnerability": "Memory leak: allocated message not freed on early return",
+    "severity": "medium"
+  },
+  {
+    "id": "dangerous_15",
     "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
     "label": "dangerous",
     "category": "buffer_overflow",
@@ -442,15 +127,6 @@
   },
   {
     "id": "safe_43",
-    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
-    "label": "safe",
-    "category": "interrupt_handling",
-    "description": "Safe interrupt handler with overflow protection",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_3",
     "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
     "label": "safe",
     "category": "pointer_arithmetic",
@@ -459,43 +135,7 @@
     "severity": "none"
   },
   {
-    "id": "safe_12",
-    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
-    "label": "safe",
-    "category": "memory_management",
-    "description": "Proper memory allocation with error checking",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_45",
-    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
-    "label": "dangerous",
-    "category": "bit_manipulation",
-    "description": "Incorrect bit masking operation",
-    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
-    "severity": "medium"
-  },
-  {
-    "id": "dangerous_38",
-    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
-    "label": "dangerous",
-    "category": "race_condition",
-    "description": "Non-atomic operation on shared variable",
-    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_42",
-    "code": "void set_timer_period(uint32_t period_us) {\n    // 32비트를 16비트로 자르면서 상위 비트 손실\n    TIMER_PERIOD = (uint16_t)period_us;  // 위험: 데이터 손실\n    \n    // period_us가 65535보다 크면 의도치 않은 동작\n}",
-    "label": "dangerous",
-    "category": "type_truncation",
-    "description": "Type truncation leading to data loss",
-    "vulnerability": "Type truncation: 32-bit value truncated to 16-bit without validation",
-    "severity": "high"
-  },
-  {
-    "id": "safe_45",
+    "id": "safe_22",
     "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
     "label": "safe",
     "category": "interrupt_handling",
@@ -504,34 +144,43 @@
     "severity": "none"
   },
   {
-    "id": "dangerous_18",
-    "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
+    "id": "dangerous_5",
+    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
     "label": "dangerous",
-    "category": "integer_overflow",
-    "description": "Integer overflow in size calculation",
-    "vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation",
-    "severity": "critical"
+    "category": "null_pointer",
+    "description": "Unchecked nested pointer dereference",
+    "vulnerability": "Null pointer dereference: config->settings not validated before use",
+    "severity": "high"
   },
   {
-    "id": "safe_8",
-    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
-    "label": "safe",
-    "category": "memory_management",
-    "description": "Proper memory allocation with error checking",
-    "vulnerability": null,
-    "severity": "none"
+    "id": "dangerous_28",
+    "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
+    "label": "dangerous",
+    "category": "buffer_overflow",
+    "description": "Off-by-one error in loop condition",
+    "vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)",
+    "severity": "high"
   },
   {
     "id": "dangerous_11",
-    "code": "int read_sensor_status(void) {\n    int status;\n    \n    if (SENSOR_REG & SENSOR_READY) {\n        status = SENSOR_REG_STATUS;\n    }\n    // else 분기에서 status 초기화 안 됨\n    \n    return status;  // 위험: 초기화 안 된 값 반환 가능\n}",
+    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
     "label": "dangerous",
-    "category": "uninitialized_variable",
-    "description": "Potentially uninitialized variable return",
-    "vulnerability": "Uninitialized variable: status may be returned without initialization",
-    "severity": "medium"
+    "category": "null_pointer",
+    "description": "Unchecked nested pointer dereference",
+    "vulnerability": "Null pointer dereference: config->settings not validated before use",
+    "severity": "high"
   },
   {
-    "id": "safe_39",
+    "id": "dangerous_49",
+    "code": "void copy_packet_data(packet_t *pkt) {\n    uint8_t *src = pkt->data;\n    uint8_t *dest = buffer;\n    \n    // pkt->length가 검증되지 않음\n    for (int i = 0; i < pkt->length; i++) {\n        *dest++ = *src++;  // 위험: dest 버퍼 경계 체크 없음\n    }\n}",
+    "label": "dangerous",
+    "category": "pointer_arithmetic",
+    "description": "Unchecked pointer arithmetic in loop",
+    "vulnerability": "Buffer overflow: destination buffer bounds not validated",
+    "severity": "high"
+  },
+  {
+    "id": "safe_16",
     "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
     "label": "safe",
     "category": "type_conversion",
@@ -541,240 +190,6 @@
   },
   {
     "id": "dangerous_31",
-    "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
-    "label": "dangerous",
-    "category": "integer_overflow",
-    "description": "Integer overflow in size calculation",
-    "vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation",
-    "severity": "critical"
-  },
-  {
-    "id": "dangerous_28",
-    "code": "void process_messages(void) {\n    message_t *msg = allocate_message();\n    \n    if (msg->priority > PRIORITY_THRESHOLD) {\n        handle_high_priority(msg);\n        return;  // 위험: early return, msg 해제 안 됨\n    }\n    \n    handle_normal_priority(msg);\n    free_message(msg);\n}",
-    "label": "dangerous",
-    "category": "memory_leak",
-    "description": "Memory leak on early return path",
-    "vulnerability": "Memory leak: allocated message not freed on early return",
-    "severity": "medium"
-  },
-  {
-    "id": "dangerous_4",
-    "code": "void copy_packet_data(packet_t *pkt) {\n    uint8_t *src = pkt->data;\n    uint8_t *dest = buffer;\n    \n    // pkt->length가 검증되지 않음\n    for (int i = 0; i < pkt->length; i++) {\n        *dest++ = *src++;  // 위험: dest 버퍼 경계 체크 없음\n    }\n}",
-    "label": "dangerous",
-    "category": "pointer_arithmetic",
-    "description": "Unchecked pointer arithmetic in loop",
-    "vulnerability": "Buffer overflow: destination buffer bounds not validated",
-    "severity": "high"
-  },
-  {
-    "id": "safe_40",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_34",
-    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
-    "label": "safe",
-    "category": "pointer_arithmetic",
-    "description": "Safe flash memory read with boundary checks",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_46",
-    "code": "int read_sensor_status(void) {\n    int status;\n    \n    if (SENSOR_REG & SENSOR_READY) {\n        status = SENSOR_REG_STATUS;\n    }\n    // else 분기에서 status 초기화 안 됨\n    \n    return status;  // 위험: 초기화 안 된 값 반환 가능\n}",
-    "label": "dangerous",
-    "category": "uninitialized_variable",
-    "description": "Potentially uninitialized variable return",
-    "vulnerability": "Uninitialized variable: status may be returned without initialization",
-    "severity": "medium"
-  },
-  {
-    "id": "dangerous_2",
-    "code": "void copy_packet_data(packet_t *pkt) {\n    uint8_t *src = pkt->data;\n    uint8_t *dest = buffer;\n    \n    // pkt->length가 검증되지 않음\n    for (int i = 0; i < pkt->length; i++) {\n        *dest++ = *src++;  // 위험: dest 버퍼 경계 체크 없음\n    }\n}",
-    "label": "dangerous",
-    "category": "pointer_arithmetic",
-    "description": "Unchecked pointer arithmetic in loop",
-    "vulnerability": "Buffer overflow: destination buffer bounds not validated",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_39",
-    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
-    "label": "dangerous",
-    "category": "race_condition",
-    "description": "Non-atomic operation on shared variable",
-    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
-    "severity": "high"
-  },
-  {
-    "id": "safe_29",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_14",
-    "code": "void set_timer_period(uint32_t period_us) {\n    // 32비트를 16비트로 자르면서 상위 비트 손실\n    TIMER_PERIOD = (uint16_t)period_us;  // 위험: 데이터 손실\n    \n    // period_us가 65535보다 크면 의도치 않은 동작\n}",
-    "label": "dangerous",
-    "category": "type_truncation",
-    "description": "Type truncation leading to data loss",
-    "vulnerability": "Type truncation: 32-bit value truncated to 16-bit without validation",
-    "severity": "high"
-  },
-  {
-    "id": "safe_38",
-    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
-    "label": "safe",
-    "category": "buffer_handling",
-    "description": "Proper bounds checking and null pointer validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_8",
-    "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
-    "label": "dangerous",
-    "category": "buffer_overflow",
-    "description": "Off-by-one error in loop condition",
-    "vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)",
-    "severity": "high"
-  },
-  {
-    "id": "safe_24",
-    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
-    "label": "safe",
-    "category": "interrupt_handling",
-    "description": "Safe interrupt handler with overflow protection",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_19",
-    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
-    "label": "dangerous",
-    "category": "null_pointer",
-    "description": "Unchecked nested pointer dereference",
-    "vulnerability": "Null pointer dereference: config->settings not validated before use",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_10",
-    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
-    "label": "dangerous",
-    "category": "null_pointer",
-    "description": "Unchecked nested pointer dereference",
-    "vulnerability": "Null pointer dereference: config->settings not validated before use",
-    "severity": "high"
-  },
-  {
-    "id": "safe_33",
-    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
-    "label": "safe",
-    "category": "type_conversion",
-    "description": "Safe type conversion with range validation",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "safe_47",
-    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
-    "label": "safe",
-    "category": "pointer_arithmetic",
-    "description": "Safe flash memory read with boundary checks",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_20",
-    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
-    "label": "dangerous",
-    "category": "bit_manipulation",
-    "description": "Incorrect bit masking operation",
-    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
-    "severity": "medium"
-  },
-  {
-    "id": "dangerous_12",
-    "code": "int read_sensor_status(void) {\n    int status;\n    \n    if (SENSOR_REG & SENSOR_READY) {\n        status = SENSOR_REG_STATUS;\n    }\n    // else 분기에서 status 초기화 안 됨\n    \n    return status;  // 위험: 초기화 안 된 값 반환 가능\n}",
-    "label": "dangerous",
-    "category": "uninitialized_variable",
-    "description": "Potentially uninitialized variable return",
-    "vulnerability": "Uninitialized variable: status may be returned without initialization",
-    "severity": "medium"
-  },
-  {
-    "id": "dangerous_6",
-    "code": "void process_messages(void) {\n    message_t *msg = allocate_message();\n    \n    if (msg->priority > PRIORITY_THRESHOLD) {\n        handle_high_priority(msg);\n        return;  // 위험: early return, msg 해제 안 됨\n    }\n    \n    handle_normal_priority(msg);\n    free_message(msg);\n}",
-    "label": "dangerous",
-    "category": "memory_leak",
-    "description": "Memory leak on early return path",
-    "vulnerability": "Memory leak: allocated message not freed on early return",
-    "severity": "medium"
-  },
-  {
-    "id": "safe_0",
-    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
-    "label": "safe",
-    "category": "pointer_arithmetic",
-    "description": "Safe flash memory read with boundary checks",
-    "vulnerability": null,
-    "severity": "none"
-  },
-  {
-    "id": "dangerous_36",
-    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
-    "label": "dangerous",
-    "category": "race_condition",
-    "description": "Non-atomic operation on shared variable",
-    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_5",
-    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
-    "label": "dangerous",
-    "category": "race_condition",
-    "description": "Non-atomic operation on shared variable",
-    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_27",
-    "code": "int read_sensor_status(void) {\n    int status;\n    \n    if (SENSOR_REG & SENSOR_READY) {\n        status = SENSOR_REG_STATUS;\n    }\n    // else 분기에서 status 초기화 안 됨\n    \n    return status;  // 위험: 초기화 안 된 값 반환 가능\n}",
-    "label": "dangerous",
-    "category": "uninitialized_variable",
-    "description": "Potentially uninitialized variable return",
-    "vulnerability": "Uninitialized variable: status may be returned without initialization",
-    "severity": "medium"
-  },
-  {
-    "id": "dangerous_44",
-    "code": "int read_sensor_status(void) {\n    int status;\n    \n    if (SENSOR_REG & SENSOR_READY) {\n        status = SENSOR_REG_STATUS;\n    }\n    // else 분기에서 status 초기화 안 됨\n    \n    return status;  // 위험: 초기화 안 된 값 반환 가능\n}",
-    "label": "dangerous",
-    "category": "uninitialized_variable",
-    "description": "Potentially uninitialized variable return",
-    "vulnerability": "Uninitialized variable: status may be returned without initialization",
-    "severity": "medium"
-  },
-  {
-    "id": "dangerous_23",
-    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
-    "label": "dangerous",
-    "category": "null_pointer",
-    "description": "Unchecked nested pointer dereference",
-    "vulnerability": "Null pointer dereference: config->settings not validated before use",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_17",
     "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
     "label": "dangerous",
     "category": "null_pointer",
@@ -792,7 +207,7 @@
     "severity": "none"
   },
   {
-    "id": "safe_41",
+    "id": "safe_46",
     "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
     "label": "safe",
     "category": "buffer_handling",
@@ -801,7 +216,52 @@
     "severity": "none"
   },
   {
-    "id": "dangerous_35",
+    "id": "dangerous_46",
+    "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
+    "label": "dangerous",
+    "category": "buffer_overflow",
+    "description": "Off-by-one error in loop condition",
+    "vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_6",
+    "code": "void set_timer_period(uint32_t period_us) {\n    // 32비트를 16비트로 자르면서 상위 비트 손실\n    TIMER_PERIOD = (uint16_t)period_us;  // 위험: 데이터 손실\n    \n    // period_us가 65535보다 크면 의도치 않은 동작\n}",
+    "label": "dangerous",
+    "category": "type_truncation",
+    "description": "Type truncation leading to data loss",
+    "vulnerability": "Type truncation: 32-bit value truncated to 16-bit without validation",
+    "severity": "high"
+  },
+  {
+    "id": "safe_41",
+    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
+    "label": "safe",
+    "category": "type_conversion",
+    "description": "Safe type conversion with range validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_29",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_9",
+    "code": "void write_to_device(uint8_t *data, size_t len) {\n    if (device_ready()) {  // Check\n        delay_ms(10);  // 지연 추가\n        device_write(data, len);  // Use - 이 사이에 상태 변경 가능\n    }\n}",
+    "label": "dangerous",
+    "category": "toctou",
+    "description": "Time-of-check to time-of-use vulnerability",
+    "vulnerability": "TOCTOU: device state may change between check and use",
+    "severity": "medium"
+  },
+  {
+    "id": "dangerous_3",
     "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
     "label": "dangerous",
     "category": "integer_overflow",
@@ -810,16 +270,7 @@
     "severity": "critical"
   },
   {
-    "id": "dangerous_9",
-    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
-    "label": "dangerous",
-    "category": "race_condition",
-    "description": "Non-atomic operation on shared variable",
-    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
-    "severity": "high"
-  },
-  {
-    "id": "safe_19",
+    "id": "safe_36",
     "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
     "label": "safe",
     "category": "interrupt_handling",
@@ -828,22 +279,103 @@
     "severity": "none"
   },
   {
-    "id": "dangerous_47",
-    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
+    "id": "dangerous_43",
+    "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
     "label": "dangerous",
-    "category": "bit_manipulation",
-    "description": "Incorrect bit masking operation",
-    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
+    "category": "buffer_overflow",
+    "description": "Off-by-one error in loop condition",
+    "vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)",
+    "severity": "high"
+  },
+  {
+    "id": "safe_1",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_14",
+    "code": "int read_sensor_status(void) {\n    int status;\n    \n    if (SENSOR_REG & SENSOR_READY) {\n        status = SENSOR_REG_STATUS;\n    }\n    // else 분기에서 status 초기화 안 됨\n    \n    return status;  // 위험: 초기화 안 된 값 반환 가능\n}",
+    "label": "dangerous",
+    "category": "uninitialized_variable",
+    "description": "Potentially uninitialized variable return",
+    "vulnerability": "Uninitialized variable: status may be returned without initialization",
     "severity": "medium"
   },
   {
-    "id": "safe_6",
-    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
+    "id": "dangerous_19",
+    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
+    "label": "dangerous",
+    "category": "race_condition",
+    "description": "Non-atomic operation on shared variable",
+    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
+    "severity": "high"
+  },
+  {
+    "id": "safe_25",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
     "label": "safe",
-    "category": "buffer_handling",
-    "description": "Proper bounds checking and null pointer validation",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
     "vulnerability": null,
     "severity": "none"
+  },
+  {
+    "id": "safe_3",
+    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
+    "label": "safe",
+    "category": "type_conversion",
+    "description": "Safe type conversion with range validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_45",
+    "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
+    "label": "dangerous",
+    "category": "integer_overflow",
+    "description": "Integer overflow in size calculation",
+    "vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation",
+    "severity": "critical"
+  },
+  {
+    "id": "safe_18",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_8",
+    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
+    "label": "safe",
+    "category": "type_conversion",
+    "description": "Safe type conversion with range validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_20",
+    "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
+    "label": "dangerous",
+    "category": "buffer_overflow",
+    "description": "Off-by-one error in loop condition",
+    "vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_26",
+    "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
+    "label": "dangerous",
+    "category": "buffer_overflow",
+    "description": "Off-by-one error in loop condition",
+    "vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)",
+    "severity": "high"
   },
   {
     "id": "safe_7",
@@ -855,16 +387,7 @@
     "severity": "none"
   },
   {
-    "id": "dangerous_29",
-    "code": "void copy_packet_data(packet_t *pkt) {\n    uint8_t *src = pkt->data;\n    uint8_t *dest = buffer;\n    \n    // pkt->length가 검증되지 않음\n    for (int i = 0; i < pkt->length; i++) {\n        *dest++ = *src++;  // 위험: dest 버퍼 경계 체크 없음\n    }\n}",
-    "label": "dangerous",
-    "category": "pointer_arithmetic",
-    "description": "Unchecked pointer arithmetic in loop",
-    "vulnerability": "Buffer overflow: destination buffer bounds not validated",
-    "severity": "high"
-  },
-  {
-    "id": "dangerous_48",
+    "id": "dangerous_38",
     "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
     "label": "dangerous",
     "category": "buffer_overflow",
@@ -873,7 +396,97 @@
     "severity": "high"
   },
   {
-    "id": "safe_25",
+    "id": "dangerous_2",
+    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
+    "label": "dangerous",
+    "category": "null_pointer",
+    "description": "Unchecked nested pointer dereference",
+    "vulnerability": "Null pointer dereference: config->settings not validated before use",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_23",
+    "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
+    "label": "dangerous",
+    "category": "integer_overflow",
+    "description": "Integer overflow in size calculation",
+    "vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation",
+    "severity": "critical"
+  },
+  {
+    "id": "safe_47",
+    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
+    "label": "safe",
+    "category": "memory_management",
+    "description": "Proper memory allocation with error checking",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_10",
+    "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
+    "label": "dangerous",
+    "category": "integer_overflow",
+    "description": "Integer overflow in size calculation",
+    "vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation",
+    "severity": "critical"
+  },
+  {
+    "id": "safe_40",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_32",
+    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
+    "label": "safe",
+    "category": "interrupt_handling",
+    "description": "Safe interrupt handler with overflow protection",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_48",
+    "code": "void set_timer_period(uint32_t period_us) {\n    // 32비트를 16비트로 자르면서 상위 비트 손실\n    TIMER_PERIOD = (uint16_t)period_us;  // 위험: 데이터 손실\n    \n    // period_us가 65535보다 크면 의도치 않은 동작\n}",
+    "label": "dangerous",
+    "category": "type_truncation",
+    "description": "Type truncation leading to data loss",
+    "vulnerability": "Type truncation: 32-bit value truncated to 16-bit without validation",
+    "severity": "high"
+  },
+  {
+    "id": "safe_42",
+    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
+    "label": "safe",
+    "category": "memory_management",
+    "description": "Proper memory allocation with error checking",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_0",
+    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
+    "label": "dangerous",
+    "category": "null_pointer",
+    "description": "Unchecked nested pointer dereference",
+    "vulnerability": "Null pointer dereference: config->settings not validated before use",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_34",
+    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
+    "label": "dangerous",
+    "category": "race_condition",
+    "description": "Non-atomic operation on shared variable",
+    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
+    "severity": "high"
+  },
+  {
+    "id": "safe_15",
     "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
     "label": "safe",
     "category": "buffer_handling",
@@ -882,7 +495,34 @@
     "severity": "none"
   },
   {
-    "id": "dangerous_37",
+    "id": "dangerous_13",
+    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
+    "label": "dangerous",
+    "category": "race_condition",
+    "description": "Non-atomic operation on shared variable",
+    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
+    "severity": "high"
+  },
+  {
+    "id": "safe_35",
+    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
+    "label": "safe",
+    "category": "interrupt_handling",
+    "description": "Safe interrupt handler with overflow protection",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_17",
+    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
+    "label": "dangerous",
+    "category": "null_pointer",
+    "description": "Unchecked nested pointer dereference",
+    "vulnerability": "Null pointer dereference: config->settings not validated before use",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_8",
     "code": "void process_messages(void) {\n    message_t *msg = allocate_message();\n    \n    if (msg->priority > PRIORITY_THRESHOLD) {\n        handle_high_priority(msg);\n        return;  // 위험: early return, msg 해제 안 됨\n    }\n    \n    handle_normal_priority(msg);\n    free_message(msg);\n}",
     "label": "dangerous",
     "category": "memory_leak",
@@ -891,11 +531,371 @@
     "severity": "medium"
   },
   {
-    "id": "safe_27",
+    "id": "safe_49",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_23",
+    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
+    "label": "safe",
+    "category": "type_conversion",
+    "description": "Safe type conversion with range validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_33",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_45",
+    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
+    "label": "safe",
+    "category": "buffer_handling",
+    "description": "Proper bounds checking and null pointer validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_0",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_17",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_27",
+    "code": "void configure_peripheral(device_config_t *config) {\n    if (config->mode == MODE_ENABLED) {\n        // config는 체크했지만 내부 포인터는 체크 안 함\n        config->settings->baudrate = 115200;  // 위험: settings가 NULL일 수 있음\n        config->settings->parity = PARITY_NONE;\n    }\n}",
+    "label": "dangerous",
+    "category": "null_pointer",
+    "description": "Unchecked nested pointer dereference",
+    "vulnerability": "Null pointer dereference: config->settings not validated before use",
+    "severity": "high"
+  },
+  {
+    "id": "safe_38",
+    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
+    "label": "safe",
+    "category": "buffer_handling",
+    "description": "Proper bounds checking and null pointer validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_6",
     "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
     "label": "safe",
     "category": "interrupt_handling",
     "description": "Safe interrupt handler with overflow protection",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_27",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_13",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_41",
+    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
+    "label": "dangerous",
+    "category": "race_condition",
+    "description": "Non-atomic operation on shared variable",
+    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_35",
+    "code": "void write_to_device(uint8_t *data, size_t len) {\n    if (device_ready()) {  // Check\n        delay_ms(10);  // 지연 추가\n        device_write(data, len);  // Use - 이 사이에 상태 변경 가능\n    }\n}",
+    "label": "dangerous",
+    "category": "toctou",
+    "description": "Time-of-check to time-of-use vulnerability",
+    "vulnerability": "TOCTOU: device state may change between check and use",
+    "severity": "medium"
+  },
+  {
+    "id": "dangerous_44",
+    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
+    "label": "dangerous",
+    "category": "race_condition",
+    "description": "Non-atomic operation on shared variable",
+    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_40",
+    "code": "void process_messages(void) {\n    message_t *msg = allocate_message();\n    \n    if (msg->priority > PRIORITY_THRESHOLD) {\n        handle_high_priority(msg);\n        return;  // 위험: early return, msg 해제 안 됨\n    }\n    \n    handle_normal_priority(msg);\n    free_message(msg);\n}",
+    "label": "dangerous",
+    "category": "memory_leak",
+    "description": "Memory leak on early return path",
+    "vulnerability": "Memory leak: allocated message not freed on early return",
+    "severity": "medium"
+  },
+  {
+    "id": "safe_2",
+    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
+    "label": "safe",
+    "category": "interrupt_handling",
+    "description": "Safe interrupt handler with overflow protection",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_14",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_31",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_44",
+    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
+    "label": "safe",
+    "category": "type_conversion",
+    "description": "Safe type conversion with range validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_18",
+    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
+    "label": "dangerous",
+    "category": "race_condition",
+    "description": "Non-atomic operation on shared variable",
+    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
+    "severity": "high"
+  },
+  {
+    "id": "safe_24",
+    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
+    "label": "safe",
+    "category": "type_conversion",
+    "description": "Safe type conversion with range validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_12",
+    "code": "void UART_IRQHandler(void) {\n    uint8_t data;\n    \n    if (UART->SR & UART_SR_RXNE) {\n        data = UART->DR;\n        \n        if (rx_buffer_index < RX_BUFFER_SIZE) {\n            rx_buffer[rx_buffer_index++] = data;\n        } else {\n            error_count++;\n        }\n    }\n}",
+    "label": "safe",
+    "category": "interrupt_handling",
+    "description": "Safe interrupt handler with overflow protection",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_5",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_10",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "safe_11",
+    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
+    "label": "safe",
+    "category": "buffer_handling",
+    "description": "Proper bounds checking and null pointer validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_4",
+    "code": "void allocate_sensor_array(uint16_t num_sensors) {\n    // num_sensors가 크면 오버플로우 발생\n    uint16_t total_size = num_sensors * sizeof(sensor_t);  // 위험: 오버플로우\n    \n    sensor_array = (sensor_t*)malloc(total_size);\n    if (sensor_array != NULL) {\n        memset(sensor_array, 0, total_size);\n    }\n}",
+    "label": "dangerous",
+    "category": "integer_overflow",
+    "description": "Integer overflow in size calculation",
+    "vulnerability": "Integer overflow: multiplication can overflow uint16_t, leading to small allocation",
+    "severity": "critical"
+  },
+  {
+    "id": "dangerous_36",
+    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
+    "label": "dangerous",
+    "category": "bit_manipulation",
+    "description": "Incorrect bit masking operation",
+    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
+    "severity": "medium"
+  },
+  {
+    "id": "dangerous_12",
+    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
+    "label": "dangerous",
+    "category": "bit_manipulation",
+    "description": "Incorrect bit masking operation",
+    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
+    "severity": "medium"
+  },
+  {
+    "id": "dangerous_29",
+    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
+    "label": "dangerous",
+    "category": "race_condition",
+    "description": "Non-atomic operation on shared variable",
+    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
+    "severity": "high"
+  },
+  {
+    "id": "safe_21",
+    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
+    "label": "safe",
+    "category": "type_conversion",
+    "description": "Safe type conversion with range validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_33",
+    "code": "void configure_gpio(uint8_t pin, uint8_t mode) {\n    // 의도: 특정 핀만 설정하려 했으나 잘못된 비트 연산\n    GPIO_CONFIG = GPIO_CONFIG | (mode << pin);  // 위험: 기존 비트 클리어 안 함\n    // 올바른 방법: GPIO_CONFIG = (GPIO_CONFIG & ~(0x03 << pin)) | (mode << pin);\n}",
+    "label": "dangerous",
+    "category": "bit_manipulation",
+    "description": "Incorrect bit masking operation",
+    "vulnerability": "Bit manipulation error: existing bits not cleared before setting new value",
+    "severity": "medium"
+  },
+  {
+    "id": "dangerous_7",
+    "code": "void process_uart_data(uint8_t *input, int len) {\n    // 체크는 있지만 '<' 대신 '<='를 사용하여 off-by-one 오류\n    if (input != NULL && len <= BUFFER_SIZE) {\n        for (int i = 0; i <= len; i++) {  // 위험: i <= len\n            uart_buffer[i] = input[i];\n        }\n    }\n}",
+    "label": "dangerous",
+    "category": "buffer_overflow",
+    "description": "Off-by-one error in loop condition",
+    "vulnerability": "Buffer overflow due to incorrect boundary condition (i <= len instead of i < len)",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_37",
+    "code": "void set_timer_period(uint32_t period_us) {\n    // 32비트를 16비트로 자르면서 상위 비트 손실\n    TIMER_PERIOD = (uint16_t)period_us;  // 위험: 데이터 손실\n    \n    // period_us가 65535보다 크면 의도치 않은 동작\n}",
+    "label": "dangerous",
+    "category": "type_truncation",
+    "description": "Type truncation leading to data loss",
+    "vulnerability": "Type truncation: 32-bit value truncated to 16-bit without validation",
+    "severity": "high"
+  },
+  {
+    "id": "safe_39",
+    "code": "int allocate_device_buffer(device_t *dev) {\n    if (dev == NULL) {\n        return -1;\n    }\n    \n    dev->buffer = (uint8_t*)malloc(DEVICE_BUFFER_SIZE);\n    if (dev->buffer == NULL) {\n        return -1;\n    }\n    \n    memset(dev->buffer, 0, DEVICE_BUFFER_SIZE);\n    dev->buffer_size = DEVICE_BUFFER_SIZE;\n    return 0;\n}",
+    "label": "safe",
+    "category": "memory_management",
+    "description": "Proper memory allocation with error checking",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_22",
+    "code": "volatile uint32_t shared_counter = 0;\n\nvoid increment_counter(void) {\n    // ISR과 main에서 동시 접근 가능\n    uint32_t temp = shared_counter;\n    temp++;\n    shared_counter = temp;  // 위험: 원자성 없음\n}",
+    "label": "dangerous",
+    "category": "race_condition",
+    "description": "Non-atomic operation on shared variable",
+    "vulnerability": "Race condition: shared variable modified without atomic operation or critical section",
+    "severity": "high"
+  },
+  {
+    "id": "safe_19",
+    "code": "void read_flash_page(uint32_t page_addr, uint8_t *data, size_t len) {\n    if (data == NULL || len == 0) {\n        return;\n    }\n    \n    if (page_addr >= FLASH_END_ADDR) {\n        return;\n    }\n    \n    uint32_t max_read = FLASH_END_ADDR - page_addr;\n    size_t read_len = (len < max_read) ? len : max_read;\n    \n    memcpy(data, (void*)page_addr, read_len);\n}",
+    "label": "safe",
+    "category": "pointer_arithmetic",
+    "description": "Safe flash memory read with boundary checks",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_21",
+    "code": "void copy_packet_data(packet_t *pkt) {\n    uint8_t *src = pkt->data;\n    uint8_t *dest = buffer;\n    \n    // pkt->length가 검증되지 않음\n    for (int i = 0; i < pkt->length; i++) {\n        *dest++ = *src++;  // 위험: dest 버퍼 경계 체크 없음\n    }\n}",
+    "label": "dangerous",
+    "category": "pointer_arithmetic",
+    "description": "Unchecked pointer arithmetic in loop",
+    "vulnerability": "Buffer overflow: destination buffer bounds not validated",
+    "severity": "high"
+  },
+  {
+    "id": "dangerous_24",
+    "code": "void write_to_device(uint8_t *data, size_t len) {\n    if (device_ready()) {  // Check\n        delay_ms(10);  // 지연 추가\n        device_write(data, len);  // Use - 이 사이에 상태 변경 가능\n    }\n}",
+    "label": "dangerous",
+    "category": "toctou",
+    "description": "Time-of-check to time-of-use vulnerability",
+    "vulnerability": "TOCTOU: device state may change between check and use",
+    "severity": "medium"
+  },
+  {
+    "id": "safe_34",
+    "code": "uint16_t read_adc_value(void) {\n    uint32_t raw_value = ADC->DR;\n    \n    // 12-bit ADC, ensure value is within range\n    if (raw_value > 0xFFF) {\n        raw_value = 0xFFF;\n    }\n    \n    return (uint16_t)raw_value;\n}",
+    "label": "safe",
+    "category": "type_conversion",
+    "description": "Safe type conversion with range validation",
+    "vulnerability": null,
+    "severity": "none"
+  },
+  {
+    "id": "dangerous_47",
+    "code": "void write_to_device(uint8_t *data, size_t len) {\n    if (device_ready()) {  // Check\n        delay_ms(10);  // 지연 추가\n        device_write(data, len);  // Use - 이 사이에 상태 변경 가능\n    }\n}",
+    "label": "dangerous",
+    "category": "toctou",
+    "description": "Time-of-check to time-of-use vulnerability",
+    "vulnerability": "TOCTOU: device state may change between check and use",
+    "severity": "medium"
+  },
+  {
+    "id": "safe_48",
+    "code": "void process_sensor_data(uint8_t *buffer, size_t len) {\n    if (buffer == NULL || len == 0 || len > MAX_BUFFER_SIZE) {\n        return;\n    }\n    \n    for (size_t i = 0; i < len; i++) {\n        sensor_data[i] = buffer[i];\n    }\n}",
+    "label": "safe",
+    "category": "buffer_handling",
+    "description": "Proper bounds checking and null pointer validation",
     "vulnerability": null,
     "severity": "none"
   }

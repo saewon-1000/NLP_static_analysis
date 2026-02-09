@@ -5,12 +5,213 @@
   },
   "results": [
     {
-      "id": "safe_44",
+      "id": "safe_20",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.8,
+      "vulnerabilities": [
+        "Buffer Overflow"
+      ],
+      "reasoning": "The code does not check if the read_len exceeds the size of the data buffer, which could lead to a buffer overflow.",
+      "correct": false
+    },
+    {
+      "id": "dangerous_42",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 1.0,
+      "vulnerabilities": [
+        "Uninitialized variable"
+      ],
+      "reasoning": "The variable 'status' is not initialized in the else branch of the if statement, which means it could contain an uninitialized value when returned.",
+      "correct": true
+    },
+    {
+      "id": "safe_9",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.9,
+      "vulnerabilities": [
+        "Buffer Overflow"
+      ],
+      "reasoning": "The function does not check if the read_len exceeds the size of the data buffer, which could lead to a buffer overflow.",
+      "correct": false
+    },
+    {
+      "id": "dangerous_1",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 1.0,
+      "vulnerabilities": [
+        "race condition"
+      ],
+      "reasoning": "The code does not ensure atomicity when incrementing the shared_counter, which can lead to race conditions if accessed concurrently by an ISR and main function.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_32",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.8,
+      "vulnerabilities": [
+        "Race Condition"
+      ],
+      "reasoning": "The function `write_to_device` does not synchronize access to the device, which could lead to a race condition if multiple threads or processes attempt to write to the device simultaneously.",
+      "correct": true
+    },
+    {
+      "id": "safe_30",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.8,
+      "vulnerabilities": [
+        "Buffer Overflow"
+      ],
+      "reasoning": "The function does not check if the read_len exceeds the size of the data buffer, which could lead to a buffer overflow.",
+      "correct": false
+    },
+    {
+      "id": "dangerous_30",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 1.0,
+      "vulnerabilities": [
+        "Buffer Overflow"
+      ],
+      "reasoning": "The code does not check if the destination buffer 'buffer' has enough space to hold the data from 'pkt->data'. This can lead to a buffer overflow, which is a significant security vulnerability.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_16",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 1.0,
+      "vulnerabilities": [
+        "Data Loss",
+        "Potential Unintended Behavior"
+      ],
+      "reasoning": "The code truncates a 32-bit unsigned integer to a 16-bit unsigned integer, leading to data loss if the input value exceeds 65535. Additionally, if the input value is greater than 65535, it will wrap around and cause unintended behavior.",
+      "correct": true
+    },
+    {
+      "id": "safe_37",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.8,
+      "vulnerabilities": [
+        "Buffer Overflow"
+      ],
+      "reasoning": "The code does not check if the destination buffer `sensor_data` has enough space to hold the data from `buffer`. If `len` is greater than the size of `sensor_data`, this could lead to a buffer overflow, which is a significant security vulnerability.",
+      "correct": false
+    },
+    {
+      "id": "dangerous_25",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.9,
+      "vulnerabilities": [
+        "off-by-one error"
+      ],
+      "reasoning": "The loop condition in the for statement uses 'i <= len', which can lead to an out-of-bounds write if 'len' is equal to the size of the buffer, resulting in a potential security vulnerability.",
+      "correct": true
+    },
+    {
+      "id": "safe_28",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.8,
+      "vulnerabilities": [
+        "Buffer Overflow"
+      ],
+      "reasoning": "The code does not check if the received data is valid before storing it in the buffer, which could lead to a buffer overflow if more data is received than the buffer can hold.",
+      "correct": false
+    },
+    {
+      "id": "safe_4",
       "true_label": "safe",
       "predicted_label": "safe",
       "confidence": 0.8,
-      "vulnerabilities": [],
-      "reasoning": "The code checks if the device pointer is NULL before attempting to allocate memory, which prevents dereferencing a null pointer. It also initializes the allocated buffer with zeros using memset, which is generally safe for most use cases. However, there is no error handling for potential issues during the allocation of the buffer, such as running out of memory.",
+      "vulnerabilities": [
+        "Potential data loss due to type casting"
+      ],
+      "reasoning": "The code casts the 32-bit `raw_value` to a 16-bit `uint16_t`, which could result in data loss if the original value exceeds the maximum representable 16-bit unsigned integer. However, this is unlikely given the subsequent check that ensures `raw_value` does not exceed 0xFFF.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_39",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.8,
+      "vulnerabilities": [
+        "early return without freeing allocated memory"
+      ],
+      "reasoning": "The function process_messages contains an early return when the message priority exceeds a threshold, which means that if handle_high_priority(msg) is called and returns before reaching the free_message(msg) call, the allocated memory for msg will not be freed. This can lead to a memory leak.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_15",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.95,
+      "vulnerabilities": [
+        "off-by-one error"
+      ],
+      "reasoning": "The loop condition in the for statement uses 'i <= len', which can lead to an out-of-bounds write if 'len' is equal to the buffer size. This off-by-one error occurs because the index 'i' will access one element beyond the end of the array.",
+      "correct": true
+    },
+    {
+      "id": "safe_43",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.8,
+      "vulnerabilities": [
+        "Buffer Overflow"
+      ],
+      "reasoning": "The function does not check if the read_len exceeds the size of the data buffer, which could lead to a buffer overflow.",
+      "correct": false
+    },
+    {
+      "id": "safe_22",
+      "true_label": "safe",
+      "predicted_label": "dangerous",
+      "confidence": 0.8,
+      "vulnerabilities": [
+        "Buffer Overflow"
+      ],
+      "reasoning": "The code does not check if the received data is valid before storing it in the buffer, which could lead to a buffer overflow if more data is received than the buffer can hold.",
+      "correct": false
+    },
+    {
+      "id": "dangerous_5",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 1.0,
+      "vulnerabilities": [
+        "NULL pointer dereference"
+      ],
+      "reasoning": "The code does not check if the 'settings' pointer in the 'device_config_t' structure is NULL before accessing its members, which can lead to a NULL pointer dereference.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_28",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 0.9,
+      "vulnerabilities": [
+        "off-by-one error"
+      ],
+      "reasoning": "The loop condition in the for statement uses 'i <= len', which can lead to an out-of-bounds write if 'len' is equal to the size of 'uart_buffer'. This is because the index 'i' will access one element beyond the end of the buffer.",
+      "correct": true
+    },
+    {
+      "id": "dangerous_11",
+      "true_label": "dangerous",
+      "predicted_label": "dangerous",
+      "confidence": 1.0,
+      "vulnerabilities": [
+        "NULL pointer dereference"
+      ],
+      "reasoning": "The code does not check if the 'settings' pointer in the 'device_config_t' structure is NULL before accessing it, which can lead to a NULL pointer dereference.",
       "correct": true
     },
     {
@@ -23,215 +224,21 @@
       ],
       "reasoning": "The code does not check if the destination buffer 'buffer' has enough space to hold 'pkt->length' bytes, leading to a potential buffer overflow.",
       "correct": true
-    },
-    {
-      "id": "dangerous_7",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "vulnerabilities": [
-        "Buffer Overflow"
-      ],
-      "reasoning": "The code does not check if the destination buffer 'buffer' has enough space to hold the data from 'pkt->data'. This can lead to a buffer overflow, which is a significant security vulnerability.",
-      "correct": true
-    },
-    {
-      "id": "safe_48",
-      "true_label": "safe",
-      "predicted_label": "safe",
-      "confidence": 0.8,
-      "vulnerabilities": [],
-      "reasoning": "The code checks if the input pointer is NULL before attempting to allocate memory, which prevents dereferencing a null pointer. It also initializes the allocated buffer with zeros using memset, which is generally safe for device buffers. However, there is no error handling for potential issues during the allocation of memory (e.g., insufficient system memory), and the code does not check if DEVICE_BUFFER_SIZE is defined or valid.",
-      "correct": true
-    },
-    {
-      "id": "dangerous_43",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "vulnerabilities": [
-        "NULL pointer dereference"
-      ],
-      "reasoning": "The code does not check if the 'settings' pointer in the 'device_config_t' structure is NULL before accessing it, which can lead to a NULL pointer dereference.",
-      "correct": true
-    },
-    {
-      "id": "dangerous_3",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "vulnerabilities": [
-        "Bitwise OR without clearing existing bits"
-      ],
-      "reasoning": "The code attempts to configure a GPIO pin by setting the mode in the GPIO_CONFIG register. However, it does not clear any existing bits at the specified pin position before setting the new mode. This can lead to unintended behavior if other bits in the same byte are set and should not be affected.",
-      "correct": true
-    },
-    {
-      "id": "safe_17",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.8,
-      "vulnerabilities": [
-        "Buffer Overflow"
-      ],
-      "reasoning": "The code does not check if the length of data to be copied exceeds the size of the destination buffer, which could lead to a buffer overflow.",
-      "correct": false
-    },
-    {
-      "id": "dangerous_33",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "vulnerabilities": [
-        "Integer Overflow"
-      ],
-      "reasoning": "The code calculates the total size by multiplying num_sensors with sizeof(sensor_t), which can lead to an integer overflow if num_sensors is sufficiently large, potentially causing malloc to allocate a smaller memory block than intended.",
-      "correct": true
-    },
-    {
-      "id": "safe_20",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.8,
-      "vulnerabilities": [
-        "Buffer Overflow"
-      ],
-      "reasoning": "The code does not check if the destination buffer `sensor_data` has enough space to hold the data from `buffer`. If `len` is greater than the size of `sensor_data`, this could lead to a buffer overflow.",
-      "correct": false
-    },
-    {
-      "id": "dangerous_34",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 0.8,
-      "vulnerabilities": [
-        "Race Condition"
-      ],
-      "reasoning": "The function `write_to_device` does not synchronize access to the device, which could lead to a race condition if multiple threads or processes attempt to write to the device simultaneously.",
-      "correct": true
-    },
-    {
-      "id": "safe_21",
-      "true_label": "safe",
-      "predicted_label": "safe",
-      "confidence": 0.8,
-      "vulnerabilities": [
-        "Potential data loss due to type casting"
-      ],
-      "reasoning": "The code casts the `uint32_t` value to `uint16_t`, which could result in data loss if the original value exceeds the maximum representable by a 16-bit unsigned integer. However, this is unlikely given the subsequent check that ensures the value does not exceed 0xFFF.",
-      "correct": true
-    },
-    {
-      "id": "safe_2",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.8,
-      "vulnerabilities": [
-        "Buffer Overflow"
-      ],
-      "reasoning": "The code does not check if the destination buffer `sensor_data` has enough space to hold the data from `buffer`. If `len` is greater than the size of `sensor_data`, it could lead to a buffer overflow.",
-      "correct": false
-    },
-    {
-      "id": "safe_11",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.8,
-      "vulnerabilities": [
-        "Buffer Overflow"
-      ],
-      "reasoning": "The code does not check if the received data is valid before storing it in the buffer, which could lead to a buffer overflow if more data is received than the buffer can hold.",
-      "correct": false
-    },
-    {
-      "id": "dangerous_16",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "vulnerabilities": [
-        "Bitwise OR without clearing existing bits"
-      ],
-      "reasoning": "The code attempts to configure a GPIO pin by setting the mode using bitwise OR, but it does not clear any existing settings for that pin first. This can lead to unintended behavior if the pin was previously configured in a different mode.",
-      "correct": true
-    },
-    {
-      "id": "dangerous_32",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "vulnerabilities": [
-        "off-by-one error"
-      ],
-      "reasoning": "The loop condition in the for statement uses 'i <= len', which can lead to an out-of-bounds write access when i equals len, as uart_buffer[len] is not a valid index.",
-      "correct": true
-    },
-    {
-      "id": "safe_35",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.8,
-      "vulnerabilities": [
-        "Buffer Overflow"
-      ],
-      "reasoning": "The function does not check if the read_len exceeds the size of the data buffer, which could lead to a buffer overflow.",
-      "correct": false
-    },
-    {
-      "id": "dangerous_21",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "vulnerabilities": [
-        "Buffer Overflow"
-      ],
-      "reasoning": "The code does not check if the destination buffer 'buffer' has enough space to hold the data from 'pkt->data'. This can lead to a buffer overflow, which is a significant security vulnerability.",
-      "correct": true
-    },
-    {
-      "id": "safe_32",
-      "true_label": "safe",
-      "predicted_label": "safe",
-      "confidence": 0.8,
-      "vulnerabilities": [],
-      "reasoning": "The code checks if the input pointer is NULL before attempting to allocate memory, which prevents dereferencing a null pointer. It also initializes the allocated buffer with zeros using memset, which is generally safe for device buffers. However, there is no error handling for potential issues during the allocation of the buffer, such as running out of memory.",
-      "correct": true
-    },
-    {
-      "id": "dangerous_40",
-      "true_label": "dangerous",
-      "predicted_label": "dangerous",
-      "confidence": 1.0,
-      "vulnerabilities": [
-        "Bitwise operation without clearing existing bits"
-      ],
-      "reasoning": "The code attempts to configure a GPIO pin by setting its mode using bitwise OR, but it does not clear any existing settings for that pin first. This can lead to unintended behavior where the existing configuration is not properly updated.",
-      "correct": true
-    },
-    {
-      "id": "safe_22",
-      "true_label": "safe",
-      "predicted_label": "dangerous",
-      "confidence": 0.8,
-      "vulnerabilities": [
-        "Buffer Overflow"
-      ],
-      "reasoning": "The code does not check if the destination buffer `sensor_data` has enough space to hold the data from `buffer`. If `len` is greater than the size of `sensor_data`, this could lead to a buffer overflow.",
-      "correct": false
     }
   ],
   "evaluation": {
     "model": "Vanilla LLM (Qwen)",
-    "accuracy": 0.7,
-    "precision": 0.625,
+    "accuracy": 0.65,
+    "precision": 0.631578947368421,
     "recall": 1.0,
-    "f1_score": 0.7692307692307693,
-    "avg_confidence": 0.89,
+    "f1_score": 0.7741935483870968,
+    "avg_confidence": 0.8925000000000001,
     "total_samples": 20,
-    "correct_predictions": 14,
+    "correct_predictions": 13,
     "confusion_matrix": {
-      "true_positive": 10,
-      "true_negative": 4,
-      "false_positive": 6,
+      "true_positive": 12,
+      "true_negative": 1,
+      "false_positive": 7,
       "false_negative": 0
     }
   }

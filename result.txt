@@ -1,29 +1,115 @@
-======================================================================
-MODEL 1: REGEX-BASED STATIC ANALYZER - 상세 분석
-======================================================================
 
-📊 성능 메트릭:
-  Accuracy:  0.580
-  Precision: 0.000
-  Recall:    0.000
-  F1 Score:  0.000
+╔═══════════════════════════════════════════════════════════╗
+║   임베디드 C 코드 의미 기반 정적 분석 프로젝트              ║
+║   Semantic Static Analysis for Embedded C Code           ║
+╚═══════════════════════════════════════════════════════════╝
 
-📈 Confusion Matrix:
-  True Positives:  0
-  True Negatives:  37
-  False Positives: 0
-  False Negatives: 42
+Checking environment...
+✓ Ollama server is running
+
+============================================================
+EXECUTION PLAN
+============================================================
+1. Generate synthetic embedded C code dataset
+2. Run Model 1: Regex-based Static Analyzer
+3. Run Model 2: Vanilla LLM (requires Ollama)
+4. Run Model 3: Enhanced LLM (requires Ollama)
+5. Compare and evaluate all models
+============================================================
+
+Proceed? (y/n): y
+
+============================================================
+STEP: Dataset Generation
+============================================================
+✓ Dataset saved: ./embedded_c_dataset.json
+  Total samples: 100
+  Safe samples: 50
+  Dangerous samples: 50
+✓ Dataset Generation completed
+
+============================================================
+STEP: Model 1: Regex Analyzer
+============================================================
+
+=== Model 1: Regex Static Analyzer ===
+Accuracy:  0.500
+Precision: 0.500
+Recall:    1.000
+F1 Score:  0.667
+✓ Model 1: Regex Analyzer completed
+
+Run LLM models? This may take several minutes (y/n): y
+
+============================================================
+STEP: Model 2: Vanilla LLM
+============================================================
+
+Analyzing 20 samples with Vanilla LLM...
+Progress: 20/20
 
 === Model 2: Vanilla LLM ===
 Accuracy:  0.650
-Precision: 0.588
+Precision: 0.632
 Recall:    1.000
-F1 Score:  0.741
-Avg Confidence: 0.883
+F1 Score:  0.774
+Avg Confidence: 0.893
+✓ Model 2: Vanilla LLM completed
+
+============================================================
+STEP: Model 3: Enhanced LLM
+============================================================
+
+Analyzing 20 samples with Enhanced LLM...
+Progress: 20/20
 
 === Model 3: Static Analysis-Enhanced LLM ===
 Accuracy:  0.750
-Precision: 0.667
+Precision: 0.706
 Recall:    1.000
-F1 Score:  0.800
+F1 Score:  0.828
+Avg Confidence: 0.963
+✓ Model 3: Enhanced LLM completed
+
+============================================================
+STEP: Model 4: Hybrid Analyzer
+============================================================
+
+Analyzing 20 samples with Hybrid Analyzer...
+Progress: 20/20
+
+Stage distribution:
+  Regex only (fast): 0 (0.0%)
+  LLM verified: 20 (100.0%)
+
+=== Model 4: Hybrid Analyzer ===
+Accuracy:  0.800
+Precision: 0.786
+Recall:    0.917
+F1 Score:  0.846
 Avg Confidence: 0.960
+LLM Usage: 100.0%
+✓ Model 4: Hybrid Analyzer completed
+
+============================================================
+STEP: Model Comparison
+============================================================
+============================================================
+EMBEDDED C CODE STATIC ANALYSIS - MODEL COMPARISON
+============================================================
+✓ Loaded: Model 1: Regex
+✓ Loaded: Model 2: Vanilla LLM
+✓ Loaded: Model 3: Enhanced LLM
+✓ Loaded: Model 4: Hybrid
+
+============================================================
+MODEL COMPARISON REPORT
+============================================================
+
+📊 Performance Metrics:
+Model                                  Acc   Prec    Rec     F1
+------------------------------------------------------------
+Model 1: Regex                       0.500  0.500  1.000  0.667
+Model 2: Vanilla LLM                 0.650  0.632  1.000  0.774
+Model 3: Enhanced LLM                0.750  0.706  1.000  0.828
+Model 4: Hybrid                      0.800  0.786  0.917  0.846

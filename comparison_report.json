@@ -1,64 +1,85 @@
 {
   "metrics_comparison": {
     "Model 1: Regex": {
-      "accuracy": 0.61,
-      "precision": 0,
-      "recall": 0.0,
-      "f1_score": 0,
+      "accuracy": 0.5,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1_score": 0.6666666666666666,
       "avg_confidence": 0
     },
     "Model 2: Vanilla LLM": {
-      "accuracy": 0.7,
-      "precision": 0.625,
+      "accuracy": 0.65,
+      "precision": 0.631578947368421,
       "recall": 1.0,
-      "f1_score": 0.7692307692307693,
-      "avg_confidence": 0.89
+      "f1_score": 0.7741935483870968,
+      "avg_confidence": 0.8925000000000001
     },
     "Model 3: Enhanced LLM": {
-      "accuracy": 0.7,
-      "precision": 0.625,
+      "accuracy": 0.75,
+      "precision": 0.7058823529411765,
       "recall": 1.0,
-      "f1_score": 0.7692307692307693,
-      "avg_confidence": 0.9724999999999999
+      "f1_score": 0.8275862068965517,
+      "avg_confidence": 0.9625
+    },
+    "Model 4: Hybrid": {
+      "accuracy": 0.8,
+      "precision": 0.7857142857142857,
+      "recall": 0.9166666666666666,
+      "f1_score": 0.8461538461538461,
+      "avg_confidence": 0.96
     }
   },
   "error_analysis": {
     "Model 1: Regex": {
-      "false_positives": 0,
-      "false_negatives": 39,
-      "fp_rate": 0.0,
-      "fn_rate": 0.39,
-      "fp_examples": [],
-      "fn_examples": [
-        "dangerous_49",
-        "dangerous_7",
-        "dangerous_43"
-      ]
-    },
-    "Model 2: Vanilla LLM": {
-      "false_positives": 6,
+      "false_positives": 50,
       "false_negatives": 0,
-      "fp_rate": 0.3,
+      "fp_rate": 0.5,
       "fn_rate": 0.0,
       "fp_examples": [
-        "safe_17",
         "safe_20",
-        "safe_2"
+        "safe_9",
+        "safe_30"
+      ],
+      "fn_examples": []
+    },
+    "Model 2: Vanilla LLM": {
+      "false_positives": 7,
+      "false_negatives": 0,
+      "fp_rate": 0.35,
+      "fn_rate": 0.0,
+      "fp_examples": [
+        "safe_20",
+        "safe_9",
+        "safe_30"
       ],
       "fn_examples": []
     },
     "Model 3: Enhanced LLM": {
-      "false_positives": 6,
+      "false_positives": 5,
       "false_negatives": 0,
-      "fp_rate": 0.3,
+      "fp_rate": 0.25,
       "fn_rate": 0.0,
       "fp_examples": [
-        "safe_17",
         "safe_20",
-        "safe_2"
+        "safe_9",
+        "safe_30"
       ],
       "fn_examples": []
+    },
+    "Model 4: Hybrid": {
+      "false_positives": 3,
+      "false_negatives": 1,
+      "fp_rate": 0.15,
+      "fn_rate": 0.05,
+      "fp_examples": [
+        "safe_20",
+        "safe_9",
+        "safe_43"
+      ],
+      "fn_examples": [
+        "dangerous_32"
+      ]
     }
   },
-  "summary": "\nHypothesis Validation:\n- Best Overall Performance (F1): Model 2: Vanilla LLM\n- Best Recall (Detection): Model 2: Vanilla LLM\n- Best Precision (Accuracy): Model 2: Vanilla LLM\n\nKey Findings:\n1. Regex-based analyzer shows limitations in detecting semantic vulnerabilities\n   that don't match predefined patterns.\n\n2. Vanilla LLM demonstrates better semantic understanding but may lack\n   domain-specific static analysis knowledge.\n\n3. Static Analysis-Enhanced LLM combines semantic understanding with\n   static analysis principles, showing improved detection of subtle bugs\n   like off-by-one errors, race conditions, and TOCTOU vulnerabilities.\n\nConclusion:\nThe hypothesis is NEEDS MORE DATA - \nLLMs augmented with static analysis domain knowledge show potential \nability to understand code intent and detect semantic vulnerabilities beyond \npattern matching.\n"
+  "summary": "\nHypothesis Validation:\n- Best Overall Performance (F1): Model 4: Hybrid\n- Best Recall (Detection): Model 1: Regex\n- Best Precision (Accuracy): Model 4: Hybrid\n\nKey Findings:\n1. Regex-based analyzer shows limitations in detecting semantic vulnerabilities\n   that don't match predefined patterns.\n\n2. Vanilla LLM demonstrates better semantic understanding but may lack\n   domain-specific static analysis knowledge.\n\n3. Static Analysis-Enhanced LLM combines semantic understanding with\n   static analysis principles, showing improved detection of subtle bugs\n   like off-by-one errors, race conditions, and TOCTOU vulnerabilities.\n\nConclusion:\nThe hypothesis is NEEDS MORE DATA - \nLLMs augmented with static analysis domain knowledge show potential \nability to understand code intent and detect semantic vulnerabilities beyond \npattern matching.\n"
 }
